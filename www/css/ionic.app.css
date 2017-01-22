@@ -7629,7 +7629,7 @@ a.button {
   margin-top: 20px; }
 
 .main-menu ion-content {
-  background-color: #FFC900; }
+  background-color: #D32F2F; }
 .main-menu .menu-header-bar-title {
   font-size: 30px;
   font-weight: 500;
@@ -7645,21 +7645,21 @@ a.button {
   border-right: none;
   border-left: none;
   border-color: rgba(179, 179, 179, 0.2);
-  background-color: #FFC900; }
+  background-color: #D32F2F; }
   .main-menu ion-item.item .item-content {
-    background-color: #FFC900;
+    background-color: #D32F2F;
     padding: 20px;
     padding-right: 60px;
     text-align: right; }
     .main-menu ion-item.item .item-content .icon {
-      width: 30px;
+      width: 26px;
       right: 20px;
       left: initial; }
     .main-menu ion-item.item .item-content .icon:before {
-      color: #254164;
+      color: #FFFFFF;
       font-size: calc(30px - 4px); }
   .main-menu ion-item.item .item-content.activated {
-    background-color: #ffd433; }
+    background-color: #D32F2F; }
   .main-menu ion-item.item .menu-text {
     color: #FFFFFF;
     font-weight: 500; }
@@ -7671,7 +7671,7 @@ a.button {
 .speakers-view {
   background: #EAEAEA; }
   .speakers-view .speaker .item.title {
-    background-color: #FFC900; }
+    background-color: #D32F2F; }
   .speakers-view .speaker .item-image {
     border-top: none; }
   .speakers-view .speaker-name {
@@ -7695,7 +7695,7 @@ a.button {
     .speakers-view .speaker-tags .badge {
       position: initial;
       margin: 4px 2px;
-      background-color: #FFC900; }
+      background-color: #D32F2F; }
     .speakers-view .speaker-tags .speaker-tag-item {
       text-align: center; }
   .speakers-view .speaker-buttons {
@@ -7736,7 +7736,7 @@ a.button {
     font-size: calc(12px + 2px);
     font-weight: 400; }
   .agenda-view .tab-title.tab-item.tab-item-active {
-    border-color: #FFC900;
+    border-color: #D32F2F;
     margin-top: 0px;
     border-width: 0px 0px 4px 0px !important; }
     .agenda-view .tab-title.tab-item.tab-item-active .tab-title {
@@ -7848,7 +7848,7 @@ a.button {
       font-weight: 500;
       display: block; }
     .event-view .event-details .event-speakers {
-      color: #FFC900;
+      color: #D32F2F;
       font-size: calc(12px + 2px);
       font-weight: 400;
       display: block; }
