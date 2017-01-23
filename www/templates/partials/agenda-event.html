@@ -1,18 +1,18 @@
 <div class="row">
   <div class="col event-time">
-    <span class="time-from">{{event.time_from}}</span>
-    <span ng-show="event.time_to" class="time-to">to {{event.time_to}}</span>
+    <span class="time-from">{{event.start}}</span>
+    <span ng-show="event.end" class="time-to">to {{event.end |date:'time'}}</span>
   </div>
-  <a ng-if="event.type !== 'global'" class="col col-75 event-content {{event.type}}" style="background-image:url({{event.background_img}})" ui-sref="app.event({eventId: event.id})">
-    <p class="event-title" ng-bind-html="event.title"></p>
-    <p class="event-speakers" ng-show="{{ event.speakers }}">
-      <span ng-repeat="speaker in event.speakers">{{speaker.name}}{{$last ? '' : ', '}}</span>
+  <a ng-if="event.event.type !== 'global'" class="col col-75 event-content {{event.event.type}}" style="background-image:url({{event.event.speakers[0].image}})" ui-sref="app.event({id: event.event.id})">
+    <p class="event-title" ng-bind-html="event.event.name"></p>
+    <p class="event-speakers" ng-show="{{event.event.speakers }}">
+      <span ng-repeat="speaker in event.event.speakers">{{speaker.name}}{{$last ? '' : ', '}}</span>
     </p>
-    <p class="event-room" ng-show="event.room">{{event.room}}</p>
-    <div class="event-type-tag {{event.type+'-event'}}">{{event.type}}</div>
+    <p class="event-room" ng-show="event.event.location">{{event.event.location}}</p>
+    <div class="event-type-tag {{event.event.type+'-event'}}">{{event.event.type}}</div>
   </a>
-  <div ng-if="event.type === 'global'" class="col col-75 event-content {{event.type}}">
-    <p class="event-title" ng-bind-html="event.title"></p>
-    <p class="event-room">{{event.room}}</p>
+  <div ng-if="event.event.type === 'global'" class="col col-75 event-content {{event.event.type}}">
+    <p class="event-title" ng-bind-html="event.event.name"></p>
+    <p class="event-room">{{event.event.location}}</p>
   </div>
 </div>

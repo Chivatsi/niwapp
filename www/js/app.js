@@ -71,7 +71,7 @@ angular.module('jsconfuy', [
   })
 
   .state('app.event', {
-    url: "/event/:eventId",
+    url: "/event/:id",
     views: {
       'menuContent': {
         templateUrl: "templates/event.html",
