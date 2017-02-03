@@ -1,0 +1,47 @@
+<ion-view class="venue-view">
+<ion-nav-bar class = "bar app-top-bar">
+  <ion-nav-title>
+    <span>Select Events</span>
+  </ion-nav-title>
+</ion-nav-bar>
+   <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="false">
+                <form id="login-form1" class="list">
+                <div class="spacer" style="height: 30px;"></div>
+                <ion-list id="login-list">
+
+                    <p>Select Category*</p>
+                    <label class="item item-input">
+                    <input placeholder="" type="text">
+                    </label>
+
+                    <div class="spacer" style="height: 25px;"></div>
+
+                   
+                    <ion-item style = "color: #254164" class="item-divider" id="page-list-item-divider4"> Select Events To Attend</ion-item>
+                </ion-list>
+                </form>
+
+
+     <ion-slide-box ng-show="event.speakers.length > 1" auto-play="true" does-continue="true">
+      <ion-slide ng-repeat="speaker in event.speakers">
+        <div style="width:100vw; overflow:hidden;">
+          <img class="speaker-image" ng-src="{{speaker.image}}"/>
+        </div>
+      </ion-slide>
+    </ion-slide-box>
+    <img ng-show="event.speakers.length == 1" class="speaker-image" ng-src="{{event.speakers[0].image}}"/>
+    <div class="event-details">
+      <span class="event-title" ng-bind-html="event.title"></span>
+      <span ng-show="event.speakers" class="event-speakers">By
+        <span class="event-speaker" ng-repeat="speaker in event.speakers">{{speaker.name}}<span class="event-speaker-concat">{{$last ? '' : ' & '}}</span></span>
+      </span>
+    </div>
+    <div class="event-description">
+      <p ng-bind-html="event.topic"></p>
+    </div>
+
+                <a href = "#/selectevent" id="login-button1" class="button button-assertive  button-block">Create Your Schedule</a>
+                
+                
+    </ion-content>
+</ion-view>

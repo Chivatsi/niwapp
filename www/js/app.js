@@ -34,7 +34,6 @@ angular.module('jsconfuy', [
         .startInit("a895716f-7649-48f6-a470-e6cf43c87eb1")
         .handleNotificationOpened(notificationOpenedCallback)
         .endInit();
-
     });
   })
 
@@ -67,23 +66,21 @@ angular.module('jsconfuy', [
     }
   })
 
-  .state('app.friend', {
-    url: "/friend",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/friends.html",
-      }
-    }
-  })
-
     .state('login', {
     url: "/login",
         templateUrl: "templates/login.html",
         controller: 'LoginCtrl'
     
-  })
+    })
 
-      .state('app.venue', {
+    .state('eventsel', {
+    url: "/selectevent",
+        templateUrl: "templates/selectevent.html",
+        // controller: 'EventselCtrl'
+    
+    })
+
+    .state('app.venue', {
         url: "/venue",
         views: {
           'menuContent': {
@@ -92,7 +89,11 @@ angular.module('jsconfuy', [
           }
         }
       })
-
+      .state('signup', {
+        url: "/signup",      
+        templateUrl: "templates/signup.html",
+        controller: 'SignupCtrl'
+      })
       .state('app.agenda', {
         url: "/agenda",
         views: {

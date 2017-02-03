@@ -7869,7 +7869,24 @@ a.button {
     .login-view {
         background: white;
     }
+  .signup-view {
+  background: #EAEAEA; }
+  .signup-view .tabs-striped .tabs {
+    background-color: #254164; }
+    .signup-view .tabs-striped .tabs .tab-item {
+      max-width: none; }
+  .signup-view  .tab-title {
+    color: #FFFFFF;
+    font-size: calc(12px + 2px);
+    font-weight: 400; }
+  .signup-view  .tab-title.tab-item.tab-item-active {
+    border-color: #D32F2F;
+    margin-top: 0px;
+    border-width: 0px 0px 4px 0px !important; }
+    .signup-view  .tab-title.tab-item.tab-item-active .tab-title {
+      font-weight: 600; }
 
+   
     body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }

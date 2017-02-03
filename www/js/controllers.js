@@ -120,4 +120,10 @@ angular.module('jsconfuy.controllers', [])
       state.go("app.speakers")
     }
   }])
+  .controller("SignupCtrl", ['$scope', '$state', function (scope, state) {
+
+    scope.logout = function () {
+      state.go("app.speakers")
+    }
+  }])
 

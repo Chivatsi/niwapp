@@ -21,7 +21,14 @@
     "org.apache.cordova.console",
     "com.ionic.keyboard",
     "cordova-plugin-whitelist",
-    "cordova-plugin-x-socialsharing"
+    "cordova-plugin-x-socialsharing",
+    "cordova-plugin-device",
+    "cordova-plugin-console",
+    "cordova-plugin-statusbar",
+    "cordova-plugin-splashscreen",
+    "ionic-plugin-keyboard",
+    "onesignal-cordova-plugin",
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
     "android"
