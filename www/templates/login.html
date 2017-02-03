@@ -1,25 +1,25 @@
-<ion-view class = "login-view">
-  <ion-nav-bar class="bar bar-header bar-positive">
-    <ion-nav-title>
-        <span style="color: white">Login</span>
-    </ion-nav-title>
-  </ion-nav-bar>
+<ion-view view-title="Login" align-title="left">
+     <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="false">
+            <form id="login-form1" class="list">
+            <div class="spacer" style="height: 40px;"></div>
+            <div class="spacer" style="height: 40px;"></div>
+            <div class="spacer" style="height: 40px;"></div>
+            <div class="spacer" style="height: 40px;"></div>
+            <ion-list id="login-list">
+                <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input placeholder="Username" type="text">
+                </label>
 
-  <ion-content padding>
-      <div class="list">
-        <label class="item item-input item-floating-label">
-            <span class="input-label">First Name</span>
-            <input type="text" placeholder="First Name">
-        </label>
-        <label class="item item-input item-floating-label">
-            <span class="input-label">Last Name</span>
-            <input type="text" placeholder="Last Name">
-        </label>
-        <label class="item item-input item-floating-label">
-            <span class="input-label">Email</span>
-            <input type="text" placeholder="Email">
-        </label>
-    </div>
-
+                <div class="spacer" style="height: 10px;"></div>
+                <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input placeholder="Password" type="password">
+                </label>
+            </ion-list>
+            </form>
+            <button id="login-button1" class="button button-assertive  button-block">Log in</button>
+            <button id="login-button1" class="button button-assertive  button-block">Create Account</button>
+            <a href-inappbrowser="/signup" id="login-button2" class="button button-positive  button-block button-clear">Forgot Password</a>
   </ion-content>
 </ion-view>

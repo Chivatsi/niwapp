@@ -80,6 +80,15 @@ angular.module('jsconfuy', [
     }
   })
 
+  .state('app.friend', {
+    url: "/friend",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/friends.html",
+      }
+    }
+  })
+
     .state('login', {
     url: "/login",
         templateUrl: "templates/login.html",

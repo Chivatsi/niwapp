@@ -1,4 +1,5 @@
-var ur = "http://192.168.0.27:8000/"
+//var ur = "http://192.168.0.27:8000/"
+var ur = "http://niw.cloudapp.net/"
 var serv=angular.module('jsconfuy.services', [])
   .service('Speakers', function ($http, $q) {
 

@@ -5777,7 +5777,8 @@ input, button, select, textarea {
 .item-floating-label {
   display: block;
   background-color: transparent;
-  box-shadow: none; }
+  box-shadow: none;
+  padding: 20px; }
   .item-floating-label .input-label {
     position: relative;
     padding: 5px 0 0 0;
@@ -7868,3 +7869,19 @@ a.button {
     .login-view {
         background: white;
     }
+
+    body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
+}
+
+.item-floating-label .placeholder-icon {
+  padding-right: 200px;
+  position: absolute;
+  bottom: 9px;
+  left: 17px;
+}
+
+.item-floating-label {
+  padding-left: 40px !important;
+}
+
