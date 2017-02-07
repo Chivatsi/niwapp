@@ -1,6 +1,6 @@
 
 //var ur = "http://192.168.0.27:8000/"
-
+//var ur="http://localhost:8000/"
 var ur = "http://niw.cloudapp.net/"
 var serv=angular.module('jsconfuy.services', [])
   .service('Speakers', function ($http, $q) {
@@ -58,10 +58,12 @@ var serv=angular.module('jsconfuy.services', [])
     };
   });
 
-serv.factory("events",["$http",function(http){
+serv.factory("events",["$http","$localStorage",function(http,storage){
+
   return{
     all:function(){
-      return http.get(ur+"api/schedule")
+        var token=storage.auth
+      return http.get(ur+"api/schedule",{headers:{"Authorization":"Bearer "+token.access_token}})
     },
     get:function(id){
       return http.get(ur+"api/events/"+id)
@@ -75,6 +77,14 @@ serv.factory("speakers",["$http",function(http){
       return http.get(ur+"api/speakers")
     }
   
+  }
+}])
+serv.factory("Account",["$http","$localStorage",function(http,storage){
+  return{
+    login:function(data){
+      data+="&grant_type=password&client_id=BxyVff93MagKbQZfgsytPFOmFQRgzibbpT51Mf2u"
+      return http.post(ur+"o/token/",data,{headers:{"Content-Type":"application/x-www-form-urlencoded"}})
+    }
   }
 }])
 

@@ -13,7 +13,8 @@ angular.module('jsconfuy', [
   'jsconfuy.services',
   'jsconfuy.filters',
   'jsconfuy.directives',
-  'ngMap'
+  'ngMap',
+  'ngStorage'
 ])
 
   .run(function ($ionicPlatform) {
@@ -56,31 +57,31 @@ angular.module('jsconfuy', [
           }
         }
       })
-  .state('app.event', {
-    url: "/event/:id",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/event.html",
-        controller: 'EventCtrl'
-      }
-    }
-  })
+      .state('app.event', {
+        url: "/event/:id",
+        views: {
+          'menuContent': {
+            templateUrl: "templates/event.html",
+            controller: 'EventCtrl'
+          }
+        }
+      })
 
-    .state('login', {
-    url: "/login",
+      .state('login', {
+        url: "/login",
         templateUrl: "templates/login.html",
         controller: 'LoginCtrl'
-    
-    })
 
-    .state('eventsel', {
-    url: "/selectevent",
+      })
+
+      .state('eventsel', {
+        url: "/selectevent",
         templateUrl: "templates/selectevent.html",
         // controller: 'EventselCtrl'
-    
-    })
 
-    .state('app.venue', {
+      })
+
+      .state('app.venue', {
         url: "/venue",
         views: {
           'menuContent': {
@@ -90,9 +91,14 @@ angular.module('jsconfuy', [
         }
       })
       .state('signup', {
-        url: "/signup",      
+        url: "/signup",
         templateUrl: "templates/signup.html",
         controller: 'SignupCtrl'
+      })
+      .state('logout', {
+        cache:false,
+        url: "/logout/:l",
+        controller: 'logoutCtrl'
       })
       .state('app.agenda', {
         url: "/agenda",
@@ -105,5 +111,5 @@ angular.module('jsconfuy', [
       });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/agenda');
+    $urlRouterProvider.otherwise('/login');
   });

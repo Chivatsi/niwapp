@@ -4,11 +4,11 @@ angular.module('jsconfuy.controllers', [])
 
   })
 
-  .controller('SpeakersCtrl',["$scope","speakers","$ionicLoading", function (scope, speakers,loader ) {
+  .controller('SpeakersCtrl', ["$scope", "speakers", "$ionicLoading", function (scope, speakers, loader) {
     scope.speakers = [];
-    speakers.get().then(function(response){
-        scope.speakers=response.data
-    },function(error){
+    speakers.get().then(function (response) {
+      scope.speakers = response.data
+    }, function (error) {
       console.log(error)
     })
     // $ionicLoading.show({
@@ -41,11 +41,14 @@ angular.module('jsconfuy.controllers', [])
     });
   })
 
-  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', function (scope, events, loader) {
+  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", function (scope, events, loader, storage) {
     scope.events = []
+    if (storage.events) {
+      scope.events = storage.events
+    }
     events.all().then(function (response) {
       console.log(response.data)
-      scope.events=response.data
+      scope.events = response.data
     }, function (error) {
       console.log(error)
     });
@@ -63,12 +66,11 @@ angular.module('jsconfuy.controllers', [])
     //     $ionicLoading.hide();
     //   });
   }])
-
-  .controller('EventCtrl', ["$scope", "events","$stateParams", function (scope, events,params) {
-    id=params.id
+  .controller('EventCtrl', ["$scope", "events", "$stateParams", function (scope, events, params) {
+    id = params.id
     events.get(id).then(function (response) {
       console.log(response)
-      scope.event=response.data
+      scope.event = response.data
     }, function (error) {
       console.log(error)
     });
@@ -82,7 +84,7 @@ angular.module('jsconfuy.controllers', [])
           speakersText += " & ";
         }
       });
-      var messageToShare = event.name + " by " + speakersText + " on "+event.times[0].date+" at "+event.times[0].start+" #NIW2017";
+      var messageToShare = event.name + " by " + speakersText + " on " + event.times[0].date + " at " + event.times[0].start + " #NIW2017";
       window.plugins.socialsharing.share(messageToShare);
     };
     // var eventId = $stateParams.eventId;
@@ -114,16 +116,101 @@ angular.module('jsconfuy.controllers', [])
     // };
 
   }])
-  .controller("LoginCtrl", ['$scope', '$state', function (scope, state) {
+  .controller("LoginCtrl", ['$scope', '$state', "Account", "$ionicLoading", "$ionicPopup", "events",
+    "$localStorage", function (scope, state, account, loader, popup, events, storage) {
+      scope.username = ""
+      scope.password = ""
+      if (storage.auth) {
+        state.go("app.agenda")
+      }
+      scope.logout = function () {
+        state.go("app.speakers")
+      }
+      function showloader(message) {
+       // message = "Loading..."
+        loader.show({
+          template: message//, duration: 3000
+        })
+      }
+      showalert = function (title, message) {
+        scope.alertPopup = popup.alert({
+          title: title,
+          template: message,
+          okType: 'button-assertive'
+        });
 
-    scope.logout = function () {
-      state.go("app.speakers")
-    }
-  }])
+        scope.alertPopup.then(function (res) {
+          // console.log('Thank you for not eating my delicious ice cream cone');
+        });
+      };
+      scope.login = function (username, password) {
+        showloader("Loading ...")
+        account.login("username=" + username + "&password=" + password)
+          .then(function (resp) {
+            loader.hide()
+            History
+            console.log(resp.data)
+            storage.auth = resp.data
+            getschedule()
+          }, function (error) {
+            loader.hide()
+            // showalert("Error",error.data)
+            if (error.data != null) {
+              if (error.data.error_description) {
+                //if(error.data.error_description=="")
+                showalert(error.statusText, error.data.error_description)
+              } else {
+                showalert(error.statusText, error.data.error.replace("_", " "))
+              }
+              // this.eheader = error.statusText
+              // if (error.url == null) {
+              //  showalert(error.statusText, "Check your internet connection")
+              // }
+              // else if (error.status == 400) {
+              //  showalert(error.statusText, "Confirm email and password")
+              // }
+            }
+            else {
+              // this.eheader = "No Internet Connection"
+              showalert("No Internet Connection", "Turn on mobile data or wifi")
+            }
+            console.log(error)
+          });
+      }
+      getschedule = function () {
+        showloader("Fetching schedule ...")
+        events.all().then(function (resp) {
+          loader.hide()
+          console.log(resp)
+          storage.events = resp.data
+          state.go("app.agenda")
+        }, function (error) {
+          loader.hide()
+          if (error.data) {
+            showalert(error.statusText, error.data.detail)
+          }
+
+          console.log(error)
+        })
+      }
+
+    }])
   .controller("SignupCtrl", ['$scope', '$state', function (scope, state) {
 
     scope.logout = function () {
       state.go("app.speakers")
     }
+  }])
+  .controller("logoutCtrl", ["$scope", "$localStorage", "$state", "$stateParams", function (scope, storage, state, params) {
+   console.log(params.l)
+    if (params.l) {
+      storage.auth = null
+      storage.events = null
+      console.log("done")
+      state.go("login")
+      console.log("gone")
+    }
+
+
   }])
 
