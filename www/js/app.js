@@ -34,7 +34,6 @@ angular.module('jsconfuy', [
         .startInit("a895716f-7649-48f6-a470-e6cf43c87eb1")
         .handleNotificationOpened(notificationOpenedCallback)
         .endInit();
-
     });
   })
 
@@ -57,8 +56,31 @@ angular.module('jsconfuy', [
           }
         }
       })
+  .state('app.event', {
+    url: "/event/:id",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/event.html",
+        controller: 'EventCtrl'
+      }
+    }
+  })
 
-      .state('app.venue', {
+    .state('login', {
+    url: "/login",
+        templateUrl: "templates/login.html",
+        controller: 'LoginCtrl'
+    
+    })
+
+    .state('eventsel', {
+    url: "/selectevent",
+        templateUrl: "templates/selectevent.html",
+        // controller: 'EventselCtrl'
+    
+    })
+
+    .state('app.venue', {
         url: "/venue",
         views: {
           'menuContent': {
@@ -67,23 +89,17 @@ angular.module('jsconfuy', [
           }
         }
       })
-
+      .state('signup', {
+        url: "/signup",      
+        templateUrl: "templates/signup.html",
+        controller: 'SignupCtrl'
+      })
       .state('app.agenda', {
         url: "/agenda",
         views: {
           'menuContent': {
             templateUrl: "templates/agenda.html",
             controller: 'AgendaCtrl'
-          }
-        }
-      })
-
-      .state('app.event', {
-        url: "/event/:id",
-        views: {
-          'menuContent': {
-            templateUrl: "templates/event.html",
-            controller: 'EventCtrl'
           }
         }
       });

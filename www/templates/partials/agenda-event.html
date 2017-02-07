@@ -3,7 +3,7 @@
     <span class="time-from">{{event.start}}</span>
     <span ng-show="event.end" class="time-to">to {{event.end |date:'time'}}</span>
   </div>
-  <a ng-if="event.event.type !== 'global'" class="col col-75 event-content {{event.event.type}}" style="background-image:url({{event.event.speakers[0].image}})" ui-sref="app.event({id: event.event.id})">
+  <a ng-if="!event.is_break" class="col col-75 event-content {{event.event.type}}" style="background-image:url({{event.event.speakers[0].image}})" ui-sref="app.event({id: event.event.id})">
     <p class="event-title" ng-bind-html="event.event.name"></p>
     <p class="event-speakers" ng-show="{{event.event.speakers }}">
       <span ng-repeat="speaker in event.event.speakers">{{speaker.name}}{{$last ? '' : ', '}}</span>
@@ -11,8 +11,8 @@
     <p class="event-room" ng-show="event.event.location">{{event.event.location}}</p>
     <div class="event-type-tag {{event.event.type+'-event'}}">{{event.event.type}}</div>
   </a>
-  <div ng-if="event.event.type === 'global'" class="col col-75 event-content {{event.event.type}}">
-    <p class="event-title" ng-bind-html="event.event.name"></p>
-    <p class="event-room">{{event.event.location}}</p>
+  <div ng-if="event.is_break" class="col col-75 event-content global">
+    <p class="event-title" >Break</p>
+    <p class="event-room">{{event.event.name}}</p>
   </div>
 </div>

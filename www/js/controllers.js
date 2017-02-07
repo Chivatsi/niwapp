@@ -41,7 +41,6 @@ angular.module('jsconfuy.controllers', [])
     });
   })
 
-
   .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', function (scope, events, loader) {
     scope.events = []
     events.all().then(function (response) {
@@ -115,9 +114,16 @@ angular.module('jsconfuy.controllers', [])
     // };
 
   }])
-  .controller("logoutCtrl", ['$scope', '$state', function (scope, state) {
+  .controller("LoginCtrl", ['$scope', '$state', function (scope, state) {
 
     scope.logout = function () {
       state.go("app.speakers")
     }
   }])
+  .controller("SignupCtrl", ['$scope', '$state', function (scope, state) {
+
+    scope.logout = function () {
+      state.go("app.speakers")
+    }
+  }])
+
