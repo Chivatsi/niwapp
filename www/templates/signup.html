@@ -10,50 +10,50 @@
                 <img src = "img/signup.png" width="100%" style=" display: block; margin: 0 auto;">
                 <div class="spacer" style="height: 20px;"></div>
                 <ion-list id="login-list">
-
+                 
                     <label class="item item-input">
                     <i class="icon ion-person placeholder-icon"></i>
-                    <input placeholder="First Name" type="text">
+                    <input ng-model="user.fstname" placeholder="First Name" type="text">
                     </label>
 
                     <div class="spacer" style="height: 15px;"></div>
 
                     <label class="item item-input">
                     <i class="icon ion-person placeholder-icon"></i>
-                    <input placeholder="Last Name" type="text">
+                    <input ng-model="user.lstname" placeholder="Last Name" type="text">
                     </label>
 
                     <div class="spacer" style="height: 15px;"></div>
 
                     <label class="item item-input">
                     <i class="icon ion-email placeholder-icon"></i>
-                    <input placeholder="Email Address" type="text">
+                    <input ng-model="user.username" placeholder="Email Address" type="text">
                     </label>
 
                     <div class="spacer" style="height: 15px;"></div>
                     
                     <label class="item item-input">
                     <i class="icon ion-iphone placeholder-icon"></i>
-                    <input placeholder="Phone Number" type="text">
+                    <input ng-model="user.phone" placeholder="Phone Number" type="text">
                     </label>
 
                     <div class="spacer" style="height: 15px;"></div>
 
                     <label class="item item-input">
                     <i class="icon ion-key placeholder-icon"></i>
-                    <input placeholder="Pasword" type="text">
+                    <input ng-model="user.password" placeholder="Pasword" type="password">
                     </label>
 
                     <div class="spacer" style="height: 15px;"></div>
 
                     <label class="item item-input">
                     <i class="icon ion-key placeholder-icon"></i>
-                    <input placeholder="Confirm Password" type="text">
+                    <input ng-model="user.cpassword" placeholder="Confirm Password" type="password">
                     </label>
 
                 </ion-list>
                 </form>
-                <a href = "#/selectevent" id="login-button1" class="button button-assertive  button-block">Next
+                <a href = "" type="submit" ng-click="selectevent()" ng-disabled="!valid" id="login-button1" class="button button-assertive  button-block">Next
                 <i style = "color: #FFFFFF" class="icon ion-arrow-right-c placeholder-icon"></i>
                 </a>
                 <a href ="#/login" class="button button-assertive  button-block button-clear">Already a user? Click here</a>

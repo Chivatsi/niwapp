@@ -93,6 +93,7 @@ $dark:                            #444 !default;
 
 .ion-android-arrow-dropright-circle:before {
   content: "\f362"; }
+  
 
 .ion-android-arrow-dropup:before {
   content: "\f365"; }
@@ -7822,6 +7823,21 @@ a.button {
         font-weight: 500;
         color: #FFFFFF; }
       .agenda-view .event-content .event-type-tag.workshop-event {
+        background: #00813c;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: #FFFFFF; }
+       .keynote-event {
+        background-color: #cc2e00;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: #FFFFFF; }
+       .talk-event {
+        background: #cc6300;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: #FFFFFF; }
+       .workshop-event {
         background: #00813c;
         text-transform: capitalize;
         font-weight: 500;

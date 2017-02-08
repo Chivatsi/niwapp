@@ -19,6 +19,7 @@ angular.module('jsconfuy', [
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
+   
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -69,6 +70,7 @@ angular.module('jsconfuy', [
 
       .state('login', {
         url: "/login",
+        //cache:false,
         templateUrl: "templates/login.html",
         controller: 'LoginCtrl'
 
@@ -77,7 +79,10 @@ angular.module('jsconfuy', [
       .state('eventsel', {
         url: "/selectevent",
         templateUrl: "templates/selectevent.html",
-        // controller: 'EventselCtrl'
+        controller: 'EventselCtrl',
+        params: {
+          user: null
+        }
 
       })
 
@@ -96,11 +101,12 @@ angular.module('jsconfuy', [
         controller: 'SignupCtrl'
       })
       .state('logout', {
-        cache:false,
+        cache: false,
         url: "/logout/:l",
         controller: 'logoutCtrl'
       })
       .state('app.agenda', {
+        cache: false,
         url: "/agenda",
         views: {
           'menuContent': {

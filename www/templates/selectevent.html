@@ -1,18 +1,18 @@
 <ion-view class="venue-view">
-<ion-nav-bar class = "bar app-top-bar">
-  <ion-nav-title>
-    <span>Select Events</span>
-  </ion-nav-title>
-</ion-nav-bar>
-   <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="true">
-                <form id="login-form1" class="list">
-                <div class="spacer" style="height: 30px;"></div>
-                <img src = "img/signup.png" width="100%" style=" display: block; margin: 0 auto;">
-                <div class="spacer" style="height: 20px;"></div>
-  
-                <ion-list id="login-list">
+  <ion-nav-bar class="bar app-top-bar">
+    <ion-nav-title>
+      <span>Select Events</span>
+    </ion-nav-title>
+  </ion-nav-bar>
+  <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="true">
+    <form id="login-form1" class="list">
+      <div class="spacer" style="height: 30px;"></div>
+      <img src="img/signup.png" width="100%" style=" display: block; margin: 0 auto;">
+      <div class="spacer" style="height: 20px;"></div>
 
-                    <label class="item item-select" id="page-select1">
+      <ion-list id="login-list">
+
+        <label class="item item-select" id="page-select1">
                       <span class="input-label">Select Category *</span>
                         <select>
                           <option>Delegate</option>
@@ -21,24 +21,39 @@
                         </select>
                     </label>
 
-                    <div class="spacer" style="height: 25px;"></div>
+        <div class="spacer" style="height: 25px;"></div>
 
-                    <a href ="#" class="button button-assertive  button-block button-clear">Select Events To Attend Below</a>
-
-      
-                </ion-list>
-                </form>
+        <a href="#" class="button button-assertive  button-block button-clear">Select Events To Attend Below</a>
 
 
-          <ion-slides  options="options" slider="data.slider">
-              <ion-slide-page>
-                <div style="background-color: brown; border-radius: 5px; height: 160px;">
-                <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">IP Masterclass</p>
-                </div>
-              </ion-slide-page>
-              <div class="spacer" style="height: 10px;"></div>
+      </ion-list>
+    </form>
+    <!--<div ng-repeat="event in events" class="row">
+      <div class="col event-time">
+        <span class="time-from">Capacity</span>
+        <span ng-show="event.capacity" class="time-to"> {{event.capacity}} People</span>
+      </div>
+      <a class="col col-75 event-content {{event.type}}" style="background-image:url({{event.speakers[0].image}})" ui-sref="app.event({id: event.id})">
+        <p class="event-title" ng-bind-html="event.name"></p>
+        <p class="event-speakers" ng-show="{{event.speakers }}">
+          <span ng-repeat="speaker in event.speakers">{{speaker.name}}{{$last ? '' : ', '}}</span>
+        </p>
+        <p class="event-room" ng-show="event.location">{{event.location}}</p>
+        <div class="event-type-tag {{event.type+'-event'}}">{{event.type}}</div>
+      </a>
+    </div>-->
 
-              <ion-slide-page>
+    <ion-list options="options" slider="data.slider">
+      <ion-checkbox ng-repeat="event in events" ng-change="addevents(event)" ng-model="event.selected">
+        <ion-slide-page>
+          <div class="{{event.type}}-event" style=" border-radius: 5px; height: 160px;">
+            <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">{{event.name}}</p>
+          </div>
+        </ion-slide-page>
+        <div class="spacer" style="height: 10px;"></div>
+      </ion-checkbox>
+
+      <!--<ion-slide-page>
                 <div style="background-color: yellowgreen; border-radius: 5px; height: 160px;">
                 <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">Design Thinking</p>    
                 </div>   
@@ -85,12 +100,12 @@
                 <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">Commercialisation of Research</p>    
                 </div>   
               </ion-slide-page>
-              <div class="spacer" style="height: 10px;"></div>
+              <div class="spacer" style="height: 10px;"></div>-->
 
-        </ion-slides>
+    </ion-list>
 
-        <a href = "#/selectevent" id="login-button1" class="button button-assertive  button-block">Create Your Schedule</a>
-                
-                
-    </ion-content>
+    <a href="" type="submit" ng-click="createschedule()" id="login-button1" class="button button-assertive  button-block">Create Your Schedule</a>
+
+
+  </ion-content>
 </ion-view>

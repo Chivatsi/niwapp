@@ -46,12 +46,19 @@ angular.module('jsconfuy.controllers', [])
     if (storage.events) {
       scope.events = storage.events
     }
-    events.all().then(function (response) {
-      console.log(response.data)
-      scope.events = response.data
-    }, function (error) {
-      console.log(error)
-    });
+    else {
+      getmyevents()
+    }
+    function getmyevents() {
+      events.userevents().then(function (response) {
+        console.log(response.data)
+        scope.events = response.data
+        storage.events = response.events
+        scope.$apply()
+      }, function (error) {
+        console.log(error)
+      });
+    }
 
     // $scope.events = [];
     // $ionicLoading.show({
@@ -127,7 +134,7 @@ angular.module('jsconfuy.controllers', [])
         state.go("app.speakers")
       }
       function showloader(message) {
-       // message = "Loading..."
+        // message = "Loading..."
         loader.show({
           template: message//, duration: 3000
         })
@@ -151,7 +158,7 @@ angular.module('jsconfuy.controllers', [])
             History
             console.log(resp.data)
             storage.auth = resp.data
-            getschedule()
+            scope.getschedule()
           }, function (error) {
             loader.hide()
             // showalert("Error",error.data)
@@ -177,9 +184,9 @@ angular.module('jsconfuy.controllers', [])
             console.log(error)
           });
       }
-      getschedule = function () {
+      scope.getschedule = function () {
         showloader("Fetching schedule ...")
-        events.all().then(function (resp) {
+        events.userevents().then(function (resp) {
           loader.hide()
           console.log(resp)
           storage.events = resp.data
@@ -195,14 +202,62 @@ angular.module('jsconfuy.controllers', [])
       }
 
     }])
-  .controller("SignupCtrl", ['$scope', '$state', function (scope, state) {
-
+  .controller("SignupCtrl", ['$scope', '$state', "$ionicLoading", "$ionicPopup", function (scope, state, loader, popup) {
+    scope.user = {}
+    scope.user.fstname = ""
+    scope.user.lstname = ""
+    scope.user.username = ""
+    scope.user.phone = ""
+    scope.user.password = ""
+    scope.user.cpassword = ""
+    scope.valid = false
     scope.logout = function () {
       state.go("app.speakers")
     }
+    // scope.$watch('user', function (new,old){
+    //   console.log("changed")
+    // });
+    showalert = function (title, message) {
+      scope.alertPopup = popup.alert({
+        title: title,
+        template: message,
+        okType: 'button-assertive'
+      });
+
+      scope.alertPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+    scope.$watch('user', function (newValue, oldValue) {
+      validate()
+    }, true);
+    validate = function () {
+      var em = 0
+      angular.forEach(scope.user, function (value, element) {
+        if (value == '') {
+          console.log(element)
+          em++;
+        }
+      })
+      if (em == 0) {
+        scope.valid = true
+      }
+      else {
+        scope.valid = false
+      }
+    }
+    scope.selectevent = function () {
+      console.log(scope.user)
+      if (scope.user.cpassword == scope.user.password) {
+        state.go("eventsel", { "user": scope.user })
+      } else {
+        showalert("Passwords mismatch", "")
+      }
+
+    }
   }])
   .controller("logoutCtrl", ["$scope", "$localStorage", "$state", "$stateParams", function (scope, storage, state, params) {
-   console.log(params.l)
+    console.log(params.l)
     if (params.l) {
       storage.auth = null
       storage.events = null
@@ -210,6 +265,133 @@ angular.module('jsconfuy.controllers', [])
       state.go("login")
       console.log("gone")
     }
+  }])
+  .controller("EventselCtrl", ["$scope", "$localStorage", "$stateParams", "$state", "events", "$ionicLoading", "$ionicPopup", "Account", function (scope, storage, params, state, events, loader, popup, account) {
+    var user = params.user
+    scope.events = []
+    scope.myevents = []
+    console.log(user)
+    function showloader(message) {
+      // message = "Loading..."
+      loader.show({
+        template: message//, duration: 3000
+      })
+    }
+    showloader("Fetching events ...")
+    events.all().then(function (resp) {
+      loader.hide()
+      scope.events = []
+      angular.forEach(resp.data, function (value) {
+        value.selected = false
+        scope.events.push(value)
+      })
+      scope.events = resp.data
+    }, function (error) {
+      loader.hide()
+
+      console.log(error)
+      if (error.data) {
+        showalert(error.statusText, error.data.detail)
+      }
+      else {
+        showalert('No Internet Connection', "Turn on Mobile data or wifi")
+      }
+    })
+    scope.addevents = function (event) {
+      if (event.selected) {
+        //  scope.myevents.push(event.id)
+      }
+      else {
+
+      }
+    }
+
+    showalert = function (title, message) {
+      scope.alertPopup = popup.alert({
+        title: title,
+        template: message,
+        okType: 'button-assertive'
+      });
+
+      scope.alertPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+
+    scope.createschedule = function () {
+      scope.myevents = []
+      angular.forEach(scope.events, function (value) {
+        if (value.selected) {
+          scope.myevents.push(value.id)
+        }
+      })
+      if (scope.myevents == 0) {
+        showalert("No Events Selected", "Select atleast one event")
+      } else {
+        showloader("Creating account and schedule ..")
+        user.events = scope.myevents
+        account.signup(user).then(function () {
+          loader.hide()
+          scope.login(user.username, user.password)
+        }, function (error) {
+          loader.hide()
+          console.log(error)
+          if (error.data) {
+            if (error.status == 401) {
+              showalert("Exists", "User already exists")
+            }
+          }
+          else {
+            showalert('No Internet Connection', "Turn on Mobile data or wifi")
+          }
+        });
+      }
+      console.log(scope.myevents)
+    }
+    scope.login = function (username, password) {
+      showloader("Signing in ...")
+      account.login("username=" + username + "&password=" + password)
+        .then(function (resp) {
+          loader.hide()
+          History
+          console.log(resp.data)
+          storage.auth = resp.data
+          getschedule()
+        }, function (error) {
+          loader.hide()
+          // showalert("Error",error.data)
+          if (error.data != null) {
+            if (error.data.error_description) {
+              //if(error.data.error_description=="")
+              showalert(error.statusText, error.data.error_description)
+            } else {
+              showalert(error.statusText, error.data.error.replace("_", " "))
+            }
+          }
+          else {
+            // this.eheader = "No Internet Connection"
+            showalert("No Internet Connection", "Turn on mobile data or wifi")
+          }
+          console.log(error)
+        });
+    }
+    getschedule = function () {
+      showloader("Finalizing ...")
+      events.userevents().then(function (resp) {
+        loader.hide()
+        console.log(resp)
+        storage.events = resp.data
+        state.go("app.agenda")
+      }, function (error) {
+        loader.hide()
+        if (error.data) {
+          showalert(error.statusText, error.data.detail)
+        }
+
+        console.log(error)
+      })
+    }
+
 
 
   }])

@@ -61,9 +61,12 @@ var serv=angular.module('jsconfuy.services', [])
 serv.factory("events",["$http","$localStorage",function(http,storage){
 
   return{
-    all:function(){
+    userevents:function(){
         var token=storage.auth
       return http.get(ur+"api/schedule",{headers:{"Authorization":"Bearer "+token.access_token}})
+    },
+    all:function(){
+      return http.get(ur+"api/events")
     },
     get:function(id){
       return http.get(ur+"api/events/"+id)
@@ -84,6 +87,9 @@ serv.factory("Account",["$http","$localStorage",function(http,storage){
     login:function(data){
       data+="&grant_type=password&client_id=BxyVff93MagKbQZfgsytPFOmFQRgzibbpT51Mf2u"
       return http.post(ur+"o/token/",data,{headers:{"Content-Type":"application/x-www-form-urlencoded"}})
+    },
+    signup:function(data){
+      return http.post(ur+"api/delegate",data)
     }
   }
 }])
