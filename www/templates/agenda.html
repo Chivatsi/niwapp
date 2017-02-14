@@ -3,14 +3,18 @@
   <ion-nav-title class="has-tabs-top">
     <span>Events</span>
   </ion-nav-title>
-  
+
   <ion-tabs class="tabs-striped tabs-top tabs-color-light">
 
     <ion-tab class="tab-title" title="{{data.fstdate.date|date:'MMM dd'|uppercase}}">
       <ion-pane>
         <ion-content class="padding">
+          <ion-refresher pulling-text="Pull to refresh..." on-refresh="getmyevents()">
+          </ion-refresher>
           <div agenda-event ng-repeat="event in data.fstdate.events" class="agenda-event"></div>
-          <center> <div ng-if="data.fstdate.events.length==0">No Events</div></center>
+          <center>
+            <div ng-if="data.fstdate.events.length==0">No Events</div>
+          </center>
         </ion-content>
       </ion-pane>
     </ion-tab>
@@ -18,8 +22,12 @@
     <ion-tab class="tab-title" title="{{data.scddate.date|date:'MMM dd'|uppercase}}">
       <ion-pane>
         <ion-content class="padding">
+          <ion-refresher pulling-text="Pull to refresh..." on-refresh="getmyevents()">
+          </ion-refresher>
           <div agenda-event ng-repeat="event in data.scddate.events" class="agenda-event"></div>
-        <center>  <div ng-if="data.scddate.events.length==0">No Events</div></center>
+          <center>
+            <div ng-if="data.scddate.events.length==0">No Events</div>
+          </center>
         </ion-content>
       </ion-pane>
     </ion-tab>

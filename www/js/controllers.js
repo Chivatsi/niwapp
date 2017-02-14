@@ -4,13 +4,52 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
   })
 
-  .controller('SpeakersCtrl', ["$scope", "speakers", "$ionicLoading", function (scope, speakers, loader) {
+  .controller('SpeakersCtrl', ["$scope", "speakers", "$ionicLoading", "$localStorage", "$cordovaToast", function (scope, speakers, loader, storage, toasta) {
     scope.speakers = [];
-    speakers.get().then(function (response) {
-      scope.speakers = response.data
-    }, function (error) {
-      console.log(error)
-    })
+
+    function showloader(message) {
+      // message = "Loading..."
+      loader.show({
+        template: message//, duration: 3000
+      })
+    }
+    function showtoast(message, duration, location) {
+      toasta.show(message, duration, location).then(function (success) {
+        console.log("The toast was shown");
+      }, function (error) {
+        console.log("The toast was not shown due to " + error);
+      });
+
+    }
+    scope.getspeakers = function (loadr) {
+      if (loadr) {
+        showloader()
+      }
+
+      speakers.get().then(function (response) {
+        scope.speakers = response.data
+        storage.speakers = response.data
+        loader.hide()
+        scope.$broadcast('scroll.refreshComplete')
+        showtoast("Speakers Updated :)", 'long', 'bottom')
+      }, function (error) {
+        loader.hide()
+        scope.$broadcast('scroll.refreshComplete')
+        if (error.data == null) {
+          showtoast("No Internet connection", 'long', 'bottom')
+        }
+        console.log(error)
+
+      })
+    }
+    if (storage.speakers == undefined || storage.speakers == null) {
+      scope.getspeakers(true)
+    }
+    else {
+      scope.speakers = storage.speakers
+    }
+
+
     // $ionicLoading.show({
     //   template: 'Loading...'
     // });
@@ -59,7 +98,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
             // showalert(JSON.stringify(resp.data))
             console.log("devices", ids)
             showtoast("Subscribed for notifications", "long", "bottom")
-            // storage.devicetoken = resp.data
+            storage.devicetoken = resp.data
           }, function (error) {
             if (error.data == null) {
               // showalert("No internet", JSON.stringify(error.data))
@@ -84,7 +123,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       data.fstdate = {}
       data.scddate = {}
       var dts = []
-      var mevents=[]
+      var mevents = []
       for (var i = 0; i < events.length; i++) {
         event = angular.copy(events[i])
         console.log(new Date(event.date + " " + event.start))
@@ -92,8 +131,8 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         if (dts.indexOf(event.date) == -1 && newd) {
           dts.push(event.date)
         }
-        event.start=new Date(event.date + " " + event.start)
-        event.end=new Date(event.date + " " + event.end)
+        event.start = new Date(event.date + " " + event.start)
+        event.end = new Date(event.date + " " + event.end)
         mevents.push(event)
       }
       console.log(dts)
@@ -151,15 +190,27 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       getEventtimes(scope.events)
     }
     else {
-      getmyevents()
+      scope.getmyevents()
     }
-    function getmyevents() {
+    scope.getmyevents = function () {
       events.userevents().then(function (response) {
         console.log(response.data)
-        scope.events = response.data
-        storage.events = response.events
-        scope.$apply()
+        storage.events = response.data
+        getEventtimes(response.data)
+        scope.$broadcast('scroll.refreshComplete')
+        showtoast("Schedule is now up to date", 'long', 'bottom')
       }, function (error) {
+        scope.$broadcast('scroll.refreshComplete')
+        if (error.data == null) {
+          showtoast("No Internet Connection", 'long', 'bottom')
+        }
+        else if (error.status == 401) {
+          showtoast("Logout and login again", 'long', 'bottom')
+        }
+        else {
+          showtoast("Failed !!!", 'long', 'bottom')
+        }
+
         console.log(error)
       });
     }
@@ -177,18 +228,48 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     //     $ionicLoading.hide();
     //   });
   }])
-  .controller('EventCtrl', ["$scope", "events", "$stateParams", function (scope, events, params) {
+  .controller('EventCtrl', ["$scope", "events", "$stateParams", "$filter", "$ionicLoading", "$ionicPopup", function (scope, events, params, filter, loader, popup) {
     id = params.id
-    events.get(id).then(function (response) {
-      console.log(response)
-      scope.event = response.data
-    }, function (error) {
-      console.log(error)
-    });
+
+    function showloader(message) {
+      // message = "Loading..."
+      loader.show({
+        template: message//, duration: 3000
+      })
+    }
+    showalert = function (title, message) {
+      scope.alertPopup = popup.alert({
+        title: title,
+        template: message,
+        okType: 'button-assertive'
+      });
+
+      scope.alertPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+    scope.getevent = function () {
+      showloader()
+      events.get(id).then(function (response) {
+        console.log(response)
+        scope.event = response.data
+        getEventtimes(response.data.times)
+        loader.hide()
+        scope.$broadcast('scroll.refreshComplete')
+      }, function (error) {
+        loader.hide()
+        scope.$broadcast('scroll.refreshComplete')
+        if (error.data == null) {
+          showalert("Not internet connection <br>Turn on data or Wifi")
+        }
+        console.log(error)
+      });
+    }
+    scope.getevent()
     scope.shareEvent = function (event) {
       var speakersText = "";
       console.log("data")
-
+      
       _.each(event.speakers, function (speaker, index) {
         speakersText += speaker.name;
         if ((index + 1) < event.speakers.length) {
@@ -198,6 +279,35 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       var messageToShare = event.name + " by " + speakersText + " on " + event.times[0].date + " at " + event.times[0].start + " #NIW2017";
       window.plugins.socialsharing.share(messageToShare);
     };
+    function getEventtimes(events) {
+      scope.data = {}
+      var data = {}
+      data.fstdate = {}
+      data.scddate = {}
+      var dts = []
+      var mevents = []
+      for (var i = 0; i < events.length; i++) {
+        event = angular.copy(events[i])
+        console.log(new Date(event.date + " " + event.start))
+        newd = new Date(event.date) >= new Date()
+        if (dts.indexOf(event.date) == -1) {
+          dts.push(event.date)
+        }
+        event.start = new Date(event.date + " " + event.start)
+        event.end = new Date(event.date + " " + event.end)
+        mevents.push(event)
+      }
+      console.log(dts)
+      var schedule = []
+      for (var i = 0; i < dts.length; i++) {
+        var date = {}
+        date.date = dts[i]
+        date.events = filter("filter")(mevents, { "date": dts[i] }, true)
+        schedule.push(date)
+      }
+      scope.schedule = schedule
+
+    }
     // var eventId = $stateParams.eventId;
 
     // $ionicLoading.show({
@@ -231,6 +341,12 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     "$localStorage", function (scope, state, account, loader, popup, events, storage) {
       scope.username = ""
       scope.password = ""
+      function showloader(message) {
+        // message = "Loading..."
+        loader.show({
+          template: message//, duration: 3000
+        })
+      }
       if (storage.auth) {
         state.go("app.agenda")
       }
@@ -256,14 +372,17 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       };
       scope.login = function (username, password) {
         showloader("Loading ...")
+
         account.login("username=" + username + "&password=" + password)
           .then(function (resp) {
             loader.hide()
             History
             console.log(resp.data)
+
             storage.auth = resp.data
             scope.getschedule()
           }, function (error) {
+            //alert("Done")
             loader.hide()
             // showalert("Error",error.data)
             if (error.data != null) {
@@ -281,9 +400,12 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
               //  showalert(error.statusText, "Confirm email and password")
               // }
             }
-            else {
+            else if (error.data == null) {
               // this.eheader = "No Internet Connection"
               showalert("No Internet Connection", "Turn on mobile data or wifi")
+            }
+            else {
+              showalert("Error", JSON.stringify(error))
             }
             console.log(error)
           });

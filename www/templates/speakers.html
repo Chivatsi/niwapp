@@ -3,9 +3,11 @@
     <span>Speakers</span>
   </ion-nav-title>
   <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getspeakers(false)">
+    </ion-refresher>
     <div class="list card speaker" ng-repeat="speaker in speakers">
       <div class="item title">
-        <h2 class="speaker-name" >{{speaker.name}}</h2>
+        <h2 class="speaker-name">{{speaker.name}}</h2>
       </div>
       <div class="item item-image">
         <img class="full-image speaker-image" ng-src="{{speaker.image}}">

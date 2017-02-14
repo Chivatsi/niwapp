@@ -6,15 +6,17 @@
     <span>{{event.type}}</span>
   </ion-nav-title>
   <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getevent()">
+    </ion-refresher>
 
     <ion-slide-box ng-show="event.speakers.length > 1" auto-play="true" does-continue="true">
       <ion-slide ng-repeat="speaker in event.speakers">
         <div style="width:100vw; overflow:hidden;">
-          <img class="speaker-image" ng-src="{{speaker.image}}"/>
+          <img class="speaker-image" ng-src="{{speaker.image}}" />
         </div>
       </ion-slide>
     </ion-slide-box>
-    <img ng-show="event.speakers.length == 1" class="speaker-image" ng-src="{{event.speakers[0].image}}"/>
+    <img ng-show="event.speakers.length == 1" class="speaker-image" ng-src="{{event.speakers[0].image}}" />
     <div class="event-details">
       <span class="event-title" ng-bind-html="event.title"></span>
       <span ng-show="event.speakers" class="event-speakers">By
@@ -23,6 +25,20 @@
     </div>
     <div class="event-description">
       <p ng-bind-html="event.topic"></p>
+
+
     </div>
+    <div class="list">
+      <div ng-repeat="day in schedule">
+        <div class="item item-divider">
+          {{day.date |date:'mediumDate'}}
+          <b> <span class="item-note">{{day.date |date:'EEEE'}}</span></b>
+        </div>
+        <div class="item">
+          <div agenda-event ng-repeat="event in day.events" class="agenda-event"></div>
+        </div>
+      </div>
+    </div>
+
   </ion-content>
 </ion-view>

@@ -1,5 +1,5 @@
 
-var ur = "http://192.168.0.15:8000/"
+var ur = "http://192.168.0.10:8000/"
 //var ur="http://localhost:8000/"
 //var ur = "http://niw.cloudapp.net/"
 var serv=angular.module('jsconfuy.services', [])
