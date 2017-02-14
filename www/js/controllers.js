@@ -32,8 +32,8 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
   .controller('VenueCtrl', function ($scope) {
     //map with venue position
     $scope.position = {
-      lat: -34.892589,
-      lng: -56.194638
+      lat: -1.2797383,
+      lng: 36.8160207
     };
 
     $scope.$on('mapInitialized', function (event, map) {
