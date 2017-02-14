@@ -1,4 +1,4 @@
-angular.module('jsconfuy.controllers', [])
+angular.module('jsconfuy.controllers', ['ngCordova'])
 
   .controller('AppCtrl', function ($scope) {
 
@@ -41,10 +41,114 @@ angular.module('jsconfuy.controllers', [])
     });
   })
 
-  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", function (scope, events, loader, storage) {
+  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", "$ionicPlatform", "Account", "$ionicPopup", "$cordovaToast", "$filter", function (scope, events, loader, storage, plat, account, popup, toasta, filter) {
+    Date.prototype.addDays = function (days) {
+      var dat = new Date(this.valueOf());
+      dat.setDate(dat.getDate() + days);
+      return dat;
+    }
+    plat.ready(function () {
+      android = plat.is("android")
+      if ((storage.devicetoken == undefined || storage.devicetoken == null) && android) {
+        //  alert("No Token Saved")
+        window.plugins.OneSignal.getIds(function (ids) {
+          console.log('getIds: ' + JSON.stringify(ids));
+          //  alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
+          //alert(JSON.stringify(ids))
+          account.devicetoken(ids).then(function (resp) {
+            // showalert(JSON.stringify(resp.data))
+            console.log("devices", ids)
+            showtoast("Subscribed for notifications", "long", "bottom")
+            // storage.devicetoken = resp.data
+          }, function (error) {
+            if (error.data == null) {
+              // showalert("No internet", JSON.stringify(error.data))
+              showtoast("No Internet  Connection", "long", "top")
+            }
+            else {
+              //  showalert(JSON.stringify(error.data))
+              showtoast(JSON.stringify(error.data), "long", 'bottom')
+            }
+          });
+
+        });
+      }
+      else {
+        // alert(storage.devicetoken)
+      }
+
+    })
+    function getEventtimes(events) {
+      scope.data = {}
+      var data = {}
+      data.fstdate = {}
+      data.scddate = {}
+      var dts = []
+      var mevents=[]
+      for (var i = 0; i < events.length; i++) {
+        event = angular.copy(events[i])
+        console.log(new Date(event.date + " " + event.start))
+        newd = new Date(event.date) >= new Date()
+        if (dts.indexOf(event.date) == -1 && newd) {
+          dts.push(event.date)
+        }
+        event.start=new Date(event.date + " " + event.start)
+        event.end=new Date(event.date + " " + event.end)
+        mevents.push(event)
+      }
+      console.log(dts)
+      if (dts.length >= 2) {
+        console.log("More than Two")
+        data.fstdate.date = new Date(dts[0])
+        data.fstdate.events = filter("filter")(mevents, { "date": dts[0] }, true)
+        data.scddate.date = new Date(dts[1])
+        data.scddate.events = filter("filter")(mevents, { "date": dts[1] }, true)
+        scope.data = data
+      }
+      else if (dts.length == 1) {
+        console.log("One")
+        data.fstdate.date = new Date(dts[0])
+        data.fstdate.events = filter("filter")(mevents, { "date": dts[0] }, true)
+        data.scddate.date = "Done"
+        data.scddate.events = []
+        scope.data = data
+
+      }
+      else if (dts.length == 0) {
+        data.fstdate.date = "Done"
+        data.fstdate.events = []
+        data.scddate.date = "Done"
+        data.scddate.events = []
+        scope.data = data
+
+      }
+
+    }
+    function showtoast(message, duration, location) {
+      toasta.show(message, duration, location).then(function (success) {
+        console.log("The toast was shown");
+      }, function (error) {
+        console.log("The toast was not shown due to " + error);
+      });
+
+    }
+
+    showalert = function (title, message) {
+      scope.alertPopup = popup.alert({
+        title: title,
+        template: message,
+        okType: 'button-assertive'
+      });
+
+      scope.alertPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
     scope.events = []
     if (storage.events) {
+      console.log("Found Events ...")
       scope.events = storage.events
+      getEventtimes(scope.events)
     }
     else {
       getmyevents()
@@ -261,6 +365,7 @@ angular.module('jsconfuy.controllers', [])
     if (params.l) {
       storage.auth = null
       storage.events = null
+      storage.devicetoken = null
       console.log("done")
       state.go("login")
       console.log("gone")

@@ -1,7 +1,7 @@
 
-//var ur = "http://192.168.0.27:8000/"
+var ur = "http://192.168.0.15:8000/"
 //var ur="http://localhost:8000/"
-var ur = "http://niw.cloudapp.net/"
+//var ur = "http://niw.cloudapp.net/"
 var serv=angular.module('jsconfuy.services', [])
   .service('Speakers', function ($http, $q) {
 
@@ -90,6 +90,11 @@ serv.factory("Account",["$http","$localStorage",function(http,storage){
     },
     signup:function(data){
       return http.post(ur+"api/delegate",data)
+    },
+    devicetoken:function(data){
+      var token=storage.auth
+     // alert("pushing")
+      return http.post(ur+"api/pushnotifications",data,{headers:{"Authorization":"Bearer "+token.access_token}})
     }
   }
 }])

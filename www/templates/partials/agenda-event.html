@@ -1,7 +1,8 @@
 <div class="row">
   <div class="col event-time">
-    <span class="time-from">{{event.start}}</span>
-    <span ng-show="event.end" class="time-to">to {{event.end |date:'time'}}</span>
+    
+    <span class="time-from">{{event.start |date:'shortTime'}}</span>
+    <span ng-show="event.end" class="time-to">to {{event.end |date:'shortTime'}}</span>
   </div>
   <a ng-if="!event.is_break" class="col col-75 event-content {{event.event.type}}" style="background-image:url({{event.event.speakers[0].image}})" ui-sref="app.event({id: event.event.id})">
     <p class="event-title" ng-bind-html="event.event.name"></p>

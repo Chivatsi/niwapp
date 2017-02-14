@@ -19,7 +19,6 @@ angular.module('jsconfuy', [
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
-   
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -32,10 +31,15 @@ angular.module('jsconfuy', [
       var notificationOpenedCallback = function (jsonData) {
         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
       };
-      window.plugins.OneSignal
-        .startInit("a895716f-7649-48f6-a470-e6cf43c87eb1")
-        .handleNotificationOpened(notificationOpenedCallback)
-        .endInit();
+      android =$ionicPlatform.is("android")
+      console.log(android)
+      if (android) {
+        window.plugins.OneSignal
+          .startInit("a895716f-7649-48f6-a470-e6cf43c87eb1")
+          .handleNotificationOpened(notificationOpenedCallback)
+          .endInit();
+      }
+
     });
   })
 
