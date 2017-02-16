@@ -80,12 +80,39 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     });
   })
 
-  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", "$ionicPlatform", "Account", "$ionicPopup", "$cordovaToast", "$filter", function (scope, events, loader, storage, plat, account, popup, toasta, filter) {
+  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", "$ionicPlatform", "Account", "$ionicPopup", "$cordovaToast", "$filter","$cordovaLocalNotification",
+  function (scope, events, loader, storage, plat, account, popup, toasta, filter,localnotification) {
     Date.prototype.addDays = function (days) {
       var dat = new Date(this.valueOf());
       dat.setDate(dat.getDate() + days);
       return dat;
     }
+          showalert = function (title, message) {
+      scope.alertPopup = popup.alert({
+        title: title,
+        template: message,
+        okType: 'button-assertive'
+      });
+
+      scope.alertPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+    scope.addnot=function(){
+      var time=new Date()
+      time=time.setSeconds(time.getSeconds()+30)
+      localnotification.add({
+        d:"123",
+        date:time,
+        message:"Test local notification",
+        autoCancel:true,
+
+      }).then(function(){
+        showalert("Notification set")
+      })
+    }
+   
+ 
     plat.ready(function () {
       android = plat.is("android")
       if ((storage.devicetoken == undefined || storage.devicetoken == null) && android) {
@@ -118,18 +145,26 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
     })
     function getEventtimes(events) {
+      var notificaitions=[]
       scope.data = {}
       var data = {}
       data.fstdate = {}
       data.scddate = {}
       var dts = []
       var mevents = []
+   
       for (var i = 0; i < events.length; i++) {
         event = angular.copy(events[i])
         console.log(new Date(event.date + " " + event.start))
-        newd = new Date(event.date) >= new Date()
+        d=new Date()
+        newd = new Date(event.date) >= d.addDays(-1)
+        tday=new Date(event.date == d.addDays(-1))
         if (dts.indexOf(event.date) == -1 && newd) {
           dts.push(event.date)
+          // alert("New Date "+String(event.date))
+        }
+        else if(dts.indexOf(event.date) !=1 && !newd){
+        //  alert("Old Date "+event.date)
         }
         event.start = new Date(event.date + " " + event.start)
         event.end = new Date(event.date + " " + event.end)
@@ -161,6 +196,25 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         scope.data = data
 
       }
+       plat.ready(function(){
+        // alert("readr ",mevents[0].date)
+          for(var i=0;i<mevents.length;i++){
+        var event=mevents[i]
+          var time=event.start
+          time=time.setSeconds(time.getSeconds()-30)
+          localnotification.add({
+            d:event.id,
+            date:time,
+            message:event.event.name+" at "+event.start.toDateString()+"  : "+event.start.toTimeString(),
+            autoCancel:true,
+
+          }).then(function(){
+           // showalert("Notification set")
+          })
+
+      }  
+    })
+    
 
     }
     function showtoast(message, duration, location) {
@@ -172,17 +226,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
     }
 
-    showalert = function (title, message) {
-      scope.alertPopup = popup.alert({
-        title: title,
-        template: message,
-        okType: 'button-assertive'
-      });
-
-      scope.alertPopup.then(function (res) {
-        // console.log('Thank you for not eating my delicious ice cream cone');
-      });
-    };
+ 
     scope.events = []
     if (storage.events) {
       console.log("Found Events ...")
