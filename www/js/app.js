@@ -88,9 +88,16 @@ angular.module('jsconfuy', [
           }
         }
       })
-
-
-
+      .state('app.program', {
+        url: "/program",
+        cache:false,
+        views: {
+          'menuContent': {
+            templateUrl: "templates/program.html",
+            controller: 'ProgramCtrl'
+          }
+        }
+      })
       .state('eventsel', {
         url: "/selectevent",
         templateUrl: "templates/selectevent.html",
