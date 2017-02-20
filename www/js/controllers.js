@@ -23,7 +23,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     }
     scope.getspeakers = function (loadr) {
       if (loadr) {
-        showloader()
+        showloader("Fetching Speakers ...")
       }
 
       speakers.get().then(function (response) {
@@ -249,7 +249,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       });
     };
     scope.getevent = function () {
-      showloader()
+      showloader("Loading ...")
       events.get(id).then(function (response) {
         console.log(response)
         scope.event = response.data
@@ -269,7 +269,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     scope.shareEvent = function (event) {
       var speakersText = "";
       console.log("data")
-      
+
       _.each(event.speakers, function (speaker, index) {
         speakersText += speaker.name;
         if ((index + 1) < event.speakers.length) {
