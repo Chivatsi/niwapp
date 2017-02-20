@@ -216,7 +216,8 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
                 var time = angular.copy(event.start)
                 time = time.setTime(time.getTime() - 5 * 60000)
                 console.log(new Date(), new Date().getTime(), new Date(time), time, newdate(time))
-                if (true) {
+                if (newdate(time)) {
+
                   console.log("create reminder for", new Date(time), "for", event.start)
                   localnotification.add({
                     id: event.id,
@@ -224,7 +225,6 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
                     title: "NIW2017 " + event.event.name,
                     message: "Starts in 5 min  in the " + event.event.location,
                     autoCancel: true,
-
                   }).then(function () {
                     //   showtoast("Scheduled "+event.event.name+"","short","bottom")
                     // showalert("Notification set")
@@ -236,6 +236,8 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
                   //   showtoast("Event "+event.event.name+" Started","long","bottom")
                 }
               }
+               showtoast("Notifications set","long","bottom")
+
             }
             // localnotification.getAll().then(function (data) {
             //   var st=String(data.length)+" "
@@ -824,6 +826,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         loader.hide()
         console.log(resp)
         storage.events = resp.data
+        storage.not = null;
         state.go("app.agenda")
       }, function (error) {
         loader.hide()
