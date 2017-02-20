@@ -3,15 +3,17 @@
     <span>Select Event</span>
   </ion-nav-title>
     <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="true">
+       
         <ion-list options="options" slider="data.slider">
-            <ion-checkbox ng-repeat="event in events" ng-change="addevents(event)" ng-model="event.selected">
-                <ion-slide-page>
-                    <div class="{{event.type}}-event" style=" border-radius: 5px; height: 100px;">
-                        <span style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 100px">{{event.name}}</span>  
-                    </div>
-                </ion-slide-page>
-                <div class="spacer" style="height: 10px;"></div>
-            </ion-checkbox>
+            <ion-checkbox ng-repeat="event in events" ng-change="addevents(event)" ng-model="event.in_schedule">
+        <ion-slide-page>
+          <div class="{{event.type}}-event" style=" background: linear-gradient(-90deg,#254164,#325B87); border-radius: 5px; height: 160px;">
+            <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%">{{event.name}}</p><br>
+            <h5 style="color: white;margin-bottom:200px;text-align: center; white-space: normal;">{{event.topic}}</h5>
+          </div>
+        </ion-slide-page>
+        <div class="spacer" style="height: 10px;"></div>
+      </ion-checkbox>
         </ion-list>
 
         <a href="" type="submit" ng-click="createschedule()" id="login-button1" class="button button-assertive  button-block">Update Schedule</a>

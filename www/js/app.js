@@ -81,6 +81,7 @@ angular.module('jsconfuy', [
       })
       .state('app.editevent', {
         url: "/editevent",
+        cache:false,
         views: {
           'menuContent': {
             templateUrl: "templates/editevent.html",
@@ -90,7 +91,7 @@ angular.module('jsconfuy', [
       })
       .state('app.program', {
         url: "/program",
-        cache:false,
+        
         views: {
           'menuContent': {
             templateUrl: "templates/program.html",
@@ -139,5 +140,5 @@ angular.module('jsconfuy', [
       });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/selectevent');
+    $urlRouterProvider.otherwise('/login');
   });

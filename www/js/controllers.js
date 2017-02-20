@@ -205,31 +205,36 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         }
         if (storage.not == null || storage.not == undefined) {
           plat.ready(function () {
-            localnotification.clearAll();
-            // alert("readr ",mevents[0].date)
-            for (var i = 0; i < mevents.length; i++) {
-              var event = angular.copy(mevents[i])
-              var time = angular.copy(event.start)
-              time = time.setTime(time.getTime() - 5 * 60000)
-              console.log(new Date(), new Date().getTime(), new Date(time), time, newdate(time))
-              if (true) {
-                console.log("create reminder for", new Date(time), "for", event.start)
-                localnotification.add({
-                  id: event.id,
-                  date: time,
-                  title: "NIW2017 " + event.event.name,
-                  message: "Starts in 5 min  in the " + event.event.location,
-                  autoCancel: true,
+            android = plat.is("android")
+            if (android) {
 
-                }).then(function () {
-                  //   showtoast("Scheduled "+event.event.name+"","short","bottom")
-                  // showalert("Notification set")
 
-                })
-              }
-              else {
-                console.log("already Started")
-                //   showtoast("Event "+event.event.name+" Started","long","bottom")
+              localnotification.clearAll();
+              // alert("readr ",mevents[0].date)
+              for (var i = 0; i < mevents.length; i++) {
+                var event = angular.copy(mevents[i])
+                var time = angular.copy(event.start)
+                time = time.setTime(time.getTime() - 5 * 60000)
+                console.log(new Date(), new Date().getTime(), new Date(time), time, newdate(time))
+                if (true) {
+                  console.log("create reminder for", new Date(time), "for", event.start)
+                  localnotification.add({
+                    id: event.id,
+                    date: time,
+                    title: "NIW2017 " + event.event.name,
+                    message: "Starts in 5 min  in the " + event.event.location,
+                    autoCancel: true,
+
+                  }).then(function () {
+                    //   showtoast("Scheduled "+event.event.name+"","short","bottom")
+                    // showalert("Notification set")
+
+                  })
+                }
+                else {
+                  console.log("already Started")
+                  //   showtoast("Event "+event.event.name+" Started","long","bottom")
+                }
               }
             }
             // localnotification.getAll().then(function (data) {
@@ -250,11 +255,15 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
       }
       function showtoast(message, duration, location) {
-        toasta.show(message, duration, location).then(function (success) {
-          console.log("The toast was shown");
-        }, function (error) {
-          console.log("The toast was not shown due to " + error);
-        });
+        android = plat.is("android")
+        if (android) {
+          toasta.show(message, duration, location).then(function (success) {
+            console.log("The toast was shown");
+          }, function (error) {
+            console.log("The toast was not shown due to " + error);
+          });
+        }
+
 
       }
 
@@ -275,7 +284,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
           storage.events = response.data
           storage.not = null
           getEventtimes(response.data)
-          
+
           showtoast("Schedule is now up to date", 'long', 'bottom')
         }, function (error) {
           scope.$broadcast('scroll.refreshComplete')
@@ -633,7 +642,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         showalert("No Events Selected", "Select atleast one event")
       } else {
         showloader("Creating account and schedule ..")
-        user.events = scope.myevents
+
         account.signup(user).then(function () {
           loader.hide()
           scope.login(user.username, user.password)
@@ -711,6 +720,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         template: message//, duration: 3000
       })
     }
+
     showloader("Fetching events ...")
     events.all().then(function (resp) {
       loader.hide()
@@ -731,6 +741,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         showalert('No Internet Connection', "Turn on Mobile data or wifi")
       }
     })
+
     scope.addevents = function (event) {
       if (event.selected) {
         //  scope.myevents.push(event.id)
@@ -755,7 +766,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     scope.createschedule = function () {
       scope.myevents = []
       angular.forEach(scope.events, function (value) {
-        if (value.selected) {
+        if (value.in_schedule) {
           scope.myevents.push(value.id)
         }
       })
@@ -763,15 +774,15 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         showalert("No Events Selected", "Select atleast one event")
       } else {
         showloader("Updating schedule ..")
-        events.editschedule({"events":scope.myevents}).then(function (resp) {
+        events.editschedule({ "events": scope.myevents }).then(function (resp) {
           loader.hide()
-          alert(JSON.stringify(resp.data))
-         
+         getschedule()
+
         }, function (error) {
           loader.hide()
           console.log(error)
           if (error.data) {
-           
+
           }
           else {
             showalert('No Internet Connection', "Turn on Mobile data or wifi")
@@ -825,7 +836,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     }
 
   }])
-  .controller("ProgramCtrl", ["$scope", "$localStorage", "$stateParams", "$state", "events", "$ionicLoading", "$ionicPopup", "Account", "$cordovaToast","$filter", function (scope, storage, params, state, events, loader, popup, account, toasta,filter) {
+  .controller("ProgramCtrl", ["$scope", "$localStorage", "$stateParams", "$state", "events", "$ionicLoading", "$ionicPopup", "Account", "$cordovaToast", "$filter", function (scope, storage, params, state, events, loader, popup, account, toasta, filter) {
     scope.evens = []
     function showloader(message) {
       // message = "Loading..."
@@ -880,16 +891,16 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         // console.log(newdate(event.start))
       }
       console.log(dts)
-      scope.program=[]
-      for (var i=0;i<dts.length;i++){
-        var dt=dts[i]
-        var day={}
-        day.date=dt
-        day.events=filter("filter")(mevents, { "date": dt }, true)
-      scope.program.push(day)
-    }
-    console.log(scope.program)
-      
+      scope.program = []
+      for (var i = 0; i < dts.length; i++) {
+        var dt = dts[i]
+        var day = {}
+        day.date = dt
+        day.events = filter("filter")(mevents, { "date": dt }, true)
+        scope.program.push(day)
+      }
+      console.log(scope.program)
+
       // if (dts.length >= 2) {
       //   console.log("More than Two")
       //   data.fstdate.date = new Date(dts[0])
@@ -926,8 +937,8 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         console.log(response.data)
         storage.events = response.data
         storage.not = null
-         getEventtimes(response.data)
-        storage.program = response.data        
+        getEventtimes(response.data)
+        storage.program = response.data
         scope.$broadcast('scroll.refreshComplete')
         showtoast("The program is now up to date", 'long', 'bottom')
       }, function (error) {
@@ -950,9 +961,9 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       scope.getevents()
     }
     else {
-      var data=angular.copy(storage.program)
+      var data = angular.copy(storage.program)
       getEventtimes(data)
-    //  scope.program=storage.program
+      //  scope.program=storage.program
 
     }
 

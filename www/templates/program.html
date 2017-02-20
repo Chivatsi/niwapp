@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <ion-view class="agenda-view">
     <ion-nav-title class="has-tabs-top">
-        <span>Program</span>
+        <span>NIW 2017</span>
     </ion-nav-title>
 
     <ion-tabs class="tabs-striped tabs-top tabs-color-light">
 
-        <ion-tab class="tab-title" title="{{data.fstdate.date|date:'MMM dd'|uppercase}}">
+        <ion-tab class="tab-title" title="Daily Program">
             <ion-pane>
-                <ion-content class="padding">
-                     <ion-refresher pulling-text="Pull to refresh..." on-refresh="getevents()">
-                        </ion-refresher>
+                <ion-content>
+                    <ion-refresher pulling-text="Pull to refresh..." on-refresh="getevents()">
+                    </ion-refresher>
                     <div ng-repeat="p in program">
-                        <div agenda-event ng-repeat="event in p.events" class="agenda-event"></div>
+                        <div class="item item-divider">
+                            {{p.date |date:'mediumDate'}}
+                            <b><span class="item-note">{{p.date |date:'EEEE'}}</span></b>
+                        </div>
+                        <div class="padding" agenda-event ng-repeat="event in p.events" class="agenda-event"></div>
                         <center>
                             <div ng-if="p.events.length==0">No Events</div>
                         </center>
