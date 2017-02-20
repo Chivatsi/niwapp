@@ -80,198 +80,208 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     });
   })
 
-  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", "$ionicPlatform", "Account", "$ionicPopup", "$cordovaToast", "$filter","$cordovaLocalNotification",
-  function (scope, events, loader, storage, plat, account, popup, toasta, filter,localnotification) {
-    Date.prototype.addDays = function (days) {
-      var dat = new Date(this.valueOf());
-      dat.setDate(dat.getDate() + days);
-      return dat;
-    }
-          showalert = function (title, message) {
-      scope.alertPopup = popup.alert({
-        title: title,
-        template: message,
-        okType: 'button-assertive'
-      });
-
-      scope.alertPopup.then(function (res) {
-        // console.log('Thank you for not eating my delicious ice cream cone');
-      });
-    };
-    scope.addnot=function(){
-      var time=new Date()
-      time=time.setSeconds(time.getSeconds()+30)
-      localnotification.add({
-        d:"123",
-        date:time,
-        message:"Test local notification",
-        autoCancel:true,
-
-      }).then(function(){
-        showalert("Notification set")
-      })
-    }
-   
- 
-    plat.ready(function () {
-      android = plat.is("android")
-      if ((storage.devicetoken == undefined || storage.devicetoken == null) && android) {
-        //  alert("No Token Saved")
-        window.plugins.OneSignal.getIds(function (ids) {
-          console.log('getIds: ' + JSON.stringify(ids));
-          //  alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
-          //alert(JSON.stringify(ids))
-          account.devicetoken(ids).then(function (resp) {
-            // showalert(JSON.stringify(resp.data))
-            console.log("devices", ids)
-            showtoast("Subscribed for notifications", "long", "bottom")
-            storage.devicetoken = resp.data
-          }, function (error) {
-            if (error.data == null) {
-              // showalert("No internet", JSON.stringify(error.data))
-              showtoast("No Internet  Connection", "long", "top")
-            }
-            else {
-              //  showalert(JSON.stringify(error.data))
-              showtoast(JSON.stringify(error.data), "long", 'bottom')
-            }
-          });
-
+  .controller('AgendaCtrl', ["$scope", "events", '$ionicLoading', "$localStorage", "$ionicPlatform", "Account", "$ionicPopup", "$cordovaToast", "$filter", "$cordovaLocalNotification",
+    function (scope, events, loader, storage, plat, account, popup, toasta, filter, localnotification) {
+      Date.prototype.addDays = function (days) {
+        var dat = new Date(this.valueOf());
+        dat.setDate(dat.getDate() + days);
+        return dat;
+      }
+      showalert = function (title, message) {
+        scope.alertPopup = popup.alert({
+          title: title,
+          template: message,
+          okType: 'button-assertive'
         });
+
+        scope.alertPopup.then(function (res) {
+          // console.log('Thank you for not eating my delicious ice cream cone');
+        });
+      };
+      scope.addnot = function () {
+        var time = new Date()
+        time = time.setSeconds(time.getSeconds() + 30)
+        localnotification.add({
+          d: "123",
+          date: time,
+          message: "Test local notification",
+          autoCancel: true,
+
+        }).then(function () {
+          showalert("Notification set")
+        })
       }
-      else {
-        // alert(storage.devicetoken)
-      }
 
-    })
-    function getEventtimes(events) {
-      var notificaitions=[]
-      scope.data = {}
-      var data = {}
-      data.fstdate = {}
-      data.scddate = {}
-      var dts = []
-      var mevents = []
-   
-      for (var i = 0; i < events.length; i++) {
-        event = angular.copy(events[i])
-        console.log(new Date(event.date + " " + event.start))
-        d=new Date()
-        newd = new Date(event.date) >= d.addDays(-1)
-        tday=new Date(event.date == d.addDays(-1))
-        if (dts.indexOf(event.date) == -1 && newd) {
-          dts.push(event.date)
-          // alert("New Date "+String(event.date))
-        }
-        else if(dts.indexOf(event.date) !=1 && !newd){
-        //  alert("Old Date "+event.date)
-        }
-        event.start = new Date(event.date + " " + event.start)
-        event.end = new Date(event.date + " " + event.end)
-        mevents.push(event)
-      }
-      console.log(dts)
-      if (dts.length >= 2) {
-        console.log("More than Two")
-        data.fstdate.date = new Date(dts[0])
-        data.fstdate.events = filter("filter")(mevents, { "date": dts[0] }, true)
-        data.scddate.date = new Date(dts[1])
-        data.scddate.events = filter("filter")(mevents, { "date": dts[1] }, true)
-        scope.data = data
-      }
-      else if (dts.length == 1) {
-        console.log("One")
-        data.fstdate.date = new Date(dts[0])
-        data.fstdate.events = filter("filter")(mevents, { "date": dts[0] }, true)
-        data.scddate.date = "Done"
-        data.scddate.events = []
-        scope.data = data
 
-      }
-      else if (dts.length == 0) {
-        data.fstdate.date = "Done"
-        data.fstdate.events = []
-        data.scddate.date = "Done"
-        data.scddate.events = []
-        scope.data = data
+      plat.ready(function () {
+        android = plat.is("android")
+        if ((storage.devicetoken == undefined || storage.devicetoken == null) && android) {
+          //  alert("No Token Saved")
+          window.plugins.OneSignal.getIds(function (ids) {
+            console.log('getIds: ' + JSON.stringify(ids));
+            //  alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
+            //alert(JSON.stringify(ids))
+            account.devicetoken(ids).then(function (resp) {
+              // showalert(JSON.stringify(resp.data))
+              console.log("devices", ids)
+              showtoast("Subscribed for notifications", "long", "bottom")
+              storage.devicetoken = resp.data
+            }, function (error) {
+              if (error.data == null) {
+                // showalert("No internet", JSON.stringify(error.data))
+                showtoast("No Internet  Connection", "long", "top")
+              }
+              else {
+                //  showalert(JSON.stringify(error.data))
+                showtoast(JSON.stringify(error.data), "long", 'bottom')
+              }
+            });
 
-      }
-       plat.ready(function(){
-        // alert("readr ",mevents[0].date)
-          for(var i=0;i<mevents.length;i++){
-        var event=mevents[i]
-          var time=event.start
-          time=time.setSeconds(time.getSeconds()-30)
-          localnotification.add({
-            d:event.id,
-            date:time,
-            message:event.event.name+" at "+event.start.toDateString()+"  : "+event.start.toTimeString(),
-            autoCancel:true,
-
-          }).then(function(){
-           // showalert("Notification set")
-          })
-
-      }  
-    })
-    
-
-    }
-    function showtoast(message, duration, location) {
-      toasta.show(message, duration, location).then(function (success) {
-        console.log("The toast was shown");
-      }, function (error) {
-        console.log("The toast was not shown due to " + error);
-      });
-
-    }
-
- 
-    scope.events = []
-    if (storage.events) {
-      console.log("Found Events ...")
-      scope.events = storage.events
-      getEventtimes(scope.events)
-    }
-    else {
-      scope.getmyevents()
-    }
-    scope.getmyevents = function () {
-      events.userevents().then(function (response) {
-        console.log(response.data)
-        storage.events = response.data
-        getEventtimes(response.data)
-        scope.$broadcast('scroll.refreshComplete')
-        showtoast("Schedule is now up to date", 'long', 'bottom')
-      }, function (error) {
-        scope.$broadcast('scroll.refreshComplete')
-        if (error.data == null) {
-          showtoast("No Internet Connection", 'long', 'bottom')
-        }
-        else if (error.status == 401) {
-          showtoast("Logout and login again", 'long', 'bottom')
+          });
         }
         else {
-          showtoast("Failed !!!", 'long', 'bottom')
+          // alert(storage.devicetoken)
         }
 
-        console.log(error)
-      });
-    }
+      })
+      function newdate(d) {
+        var date = new Date(d).getTime()
+        return date > new Date().getTime()
+      }
 
-    // $scope.events = [];
-    // $ionicLoading.show({
-    //   template: 'Loading...'
-    // });
+      function getEventtimes(events) {
+        var notificaitions = []
+        scope.data = {}
+        var data = {}
+        data.fstdate = {}
+        data.scddate = {}
+        var dts = []
+        var mevents = []
 
-    // Agenda.get()
-    //   .then(function (events) {
-    //     $scope.events = events;
-    //     $ionicLoading.hide();
-    //   }, function (err) {
-    //     $ionicLoading.hide();
-    //   });
-  }])
+        for (var i = 0; i < events.length; i++) {
+          event = angular.copy(events[i])
+          //console.log(new Date(event.date + " " + event.start))
+          d = new Date()
+          newd = new Date(event.date) >= d.addDays(-1)
+          tday = new Date(event.date == d.addDays(-1))
+          if (dts.indexOf(event.date) == -1 && newd) {
+            dts.push(event.date)
+            // alert("New Date "+String(event.date))
+          }
+          else if (dts.indexOf(event.date) != 1 && !newd) {
+            //  alert("Old Date "+event.date)
+          }
+          event.start = new Date(event.date + " " + event.start)
+          event.end = new Date(event.date + " " + event.end)
+          mevents.push(event)
+          // console.log(newdate(event.start))
+        }
+        console.log(dts)
+        if (dts.length >= 2) {
+          console.log("More than Two")
+          data.fstdate.date = new Date(dts[0])
+          data.fstdate.events = filter("filter")(mevents, { "date": dts[0] }, true)
+          data.scddate.date = new Date(dts[1])
+          data.scddate.events = filter("filter")(mevents, { "date": dts[1] }, true)
+          scope.data = data
+        }
+        else if (dts.length == 1) {
+          console.log("One")
+          data.fstdate.date = new Date(dts[0])
+          data.fstdate.events = filter("filter")(mevents, { "date": dts[0] }, true)
+          data.scddate.date = "Done"
+          data.scddate.events = []
+          scope.data = data
+
+        }
+        else if (dts.length == 0) {
+          data.fstdate.date = "Done"
+          data.fstdate.events = []
+          data.scddate.date = "Done"
+          data.scddate.events = []
+          scope.data = data
+
+        }
+        plat.ready(function () {
+         localnotification.clearAll();
+          // alert("readr ",mevents[0].date)
+          for (var i = 0; i < mevents.length; i++) {
+            var event = angular.copy(mevents[i])
+            var time = event.start
+             time = time.setSeconds(time.getSeconds() - 60 * 5)
+            if (newdate(time)) {
+              localnotification.add({
+                d: event.id,
+                date: time,
+                message: event.event.name + " at " + event.start.toDateString() + "  : " + event.start.toTimeString(),
+                autoCancel: true,
+
+              }).then(function () {
+                // showalert("Notification set")
+              })
+            }
+
+
+          }
+        })
+
+
+      }
+      function showtoast(message, duration, location) {
+        toasta.show(message, duration, location).then(function (success) {
+          console.log("The toast was shown");
+        }, function (error) {
+          console.log("The toast was not shown due to " + error);
+        });
+
+      }
+
+
+      scope.events = []
+      if (storage.events) {
+        console.log("Found Events ...")
+        scope.events = storage.events
+        getEventtimes(scope.events)
+      }
+      else {
+        scope.getmyevents()
+      }
+      scope.getmyevents = function () {
+        events.userevents().then(function (response) {
+          console.log(response.data)
+          storage.events = response.data
+          getEventtimes(response.data)
+          scope.$broadcast('scroll.refreshComplete')
+          showtoast("Schedule is now up to date", 'long', 'bottom')
+        }, function (error) {
+          scope.$broadcast('scroll.refreshComplete')
+          if (error.data == null) {
+            showtoast("No Internet Connection", 'long', 'bottom')
+          }
+          else if (error.status == 401) {
+            showtoast("Logout and login again", 'long', 'bottom')
+          }
+          else {
+            showtoast("Failed !!!", 'long', 'bottom')
+          }
+
+          console.log(error)
+        });
+      }
+
+      // $scope.events = [];
+      // $ionicLoading.show({
+      //   template: 'Loading...'
+      // });
+
+      // Agenda.get()
+      //   .then(function (events) {
+      //     $scope.events = events;
+      //     $ionicLoading.hide();
+      //   }, function (err) {
+      //     $ionicLoading.hide();
+      //   });
+    }])
   .controller('EventCtrl', ["$scope", "events", "$stateParams", "$filter", "$ionicLoading", "$ionicPopup", function (scope, events, params, filter, loader, popup) {
     id = params.id
 
@@ -416,7 +426,6 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       };
       scope.login = function (username, password) {
         showloader("Loading ...")
-
         account.login("username=" + username + "&password=" + password)
           .then(function (resp) {
             loader.hide()
