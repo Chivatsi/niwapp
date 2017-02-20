@@ -80,6 +80,15 @@ angular.module('jsconfuy', [
 
       })
 
+        .state('app.editevent', {
+        url: "/editevent",
+        //cache:false,
+        templateUrl: "templates/editevent.html",
+        controller: 'EditCtrl'
+
+      })
+
+
       .state('eventsel', {
         url: "/selectevent",
         templateUrl: "templates/selectevent.html",
