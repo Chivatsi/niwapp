@@ -112,7 +112,6 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         })
       }
 
-
       plat.ready(function () {
         android = plat.is("android")
         if ((storage.devicetoken == undefined || storage.devicetoken == null) && android) {
@@ -157,7 +156,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         data.scddate = {}
         var dts = []
         var mevents = []
-
+       
         for (var i = 0; i < events.length; i++) {
           event = angular.copy(events[i])
           //console.log(new Date(event.date + " " + event.start))
@@ -204,33 +203,49 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
           scope.data = data
 
         }
-        plat.ready(function () {
-             localnotification.clearAll();
-          // alert("readr ",mevents[0].date)
-          for (var i = 0; i < mevents.length; i++) {
-            var event = angular.copy(mevents[i])
-            var time = angular.copy(event.start)
-            time = time.setTime(time.getTime() - 5 * 60000)
-            console.log(new Date(time), time, newdate(time))
-            if ( newdate(time)) {
-              localnotification.add({
-                d: event.id,
-                date: time,
-                message: event.event.name + " at " + event.start.toDateString() + "  : " + event.start.toTimeString(),
-                autoCancel: true,
+        if (storage.not == null || storage.not == undefined) {
+          plat.ready(function () {
+            localnotification.clearAll();
+            // alert("readr ",mevents[0].date)
+            for (var i = 0; i < mevents.length; i++) {
+              var event = angular.copy(mevents[i])
+              var time = angular.copy(event.start)
+              time = time.setTime(time.getTime() - 5 * 60000)
+              console.log(new Date(), new Date().getTime(), new Date(time), time, newdate(time))
+              if (true) {
+                console.log("create reminder for", new Date(time),"for",event.start)
+                localnotification.add({
+                  id: event.id,
+                  date: time,
+                  title:"NIW2017 "+event.event.name ,
+                  message:"Starts in 5 min  in the "  + event.event.location,
+                  autoCancel: true,
+                  
+                }).then(function () {
+                  //   showtoast("Scheduled "+event.event.name+"","short","bottom")
+                  // showalert("Notification set")
 
-              }).then(function () {
-                //   showtoast("Scheduled "+event.event.name+"","short","bottom")
-                // showalert("Notification set")
-              })
+                })
+              }
+              else {
+                console.log("already Started")
+                //   showtoast("Event "+event.event.name+" Started","long","bottom")
+              }
             }
-            else {
-               // showtoast("Event "+event.event.name+" Started","long","bottom")
-            }
-
-
-          }
-        })
+            // localnotification.getAll().then(function (data) {
+            //   var st=String(data.length)+" "
+            //   for (var i=0;i<data.length;i++){
+            //     st+=new Date(data[i].at)+"<br>"
+            //   }
+            //   showalert(st)
+            // });
+              storage.not = "Noti set";
+             // showalert("Updated Notifications")
+          })
+        }
+        else {
+       //   showalert("Notification set "+storage.not)
+        }
 
 
       }
@@ -257,6 +272,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         events.userevents().then(function (response) {
           console.log(response.data)
           storage.events = response.data
+          storage.not = null
           getEventtimes(response.data)
           scope.$broadcast('scroll.refreshComplete')
           showtoast("Schedule is now up to date", 'long', 'bottom')
