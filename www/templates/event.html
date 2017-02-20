@@ -26,19 +26,32 @@
     <div class="event-description">
       <p ng-bind-html="event.topic"></p>
 
-
     </div>
-    <div class="list">
       <div ng-repeat="day in schedule">
         <div class="item item-divider">
-          {{day.date |date:'mediumDate'}}
-          <b> <span class="item-note">{{day.date |date:'EEEE'}}</span></b>
+          <div>
+            {{day.date |date:'mediumDate'}}
+            <b><span class="item-note">{{day.date |date:'EEEE'}}<br>UON Towers</span></b> 
+          </div>
         </div>
-        <div class="item">
-          <div agenda-event ng-repeat="event in day.events" class="agenda-event"></div>
-        </div>
-      </div>
-    </div>
 
+        <div class ="padding">
+         <h6>8.00 AM - 12.00 PM</h6>
+         <b><h5 style="padding-left: 60%">Introduction to Design Thinking</h5></b>
+        </div>
+        <br>
+
+        <div class ="padding"> 
+         <h6>12.00 PM - 2.00 PM</h6>
+         <b><h5 style="padding-left: 60%">Lunch Break</h5></b>
+        </div>
+        <br>
+
+        <div class ="padding">
+         <h6>2.00 PM - 4.00PM</h6>
+         <b><h5 style="padding-left: 60%">Lean Canvas</h5></b><br>
+        </div>
+      
+      </div>
   </ion-content>
 </ion-view>
