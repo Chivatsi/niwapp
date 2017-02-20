@@ -46,9 +46,9 @@
     <ion-list options="options" slider="data.slider">
       <ion-checkbox ng-repeat="event in events" ng-change="addevents(event)" ng-model="event.selected">
         <ion-slide-page>
-          <div class="{{event.type}}-event" style=" border-radius: 5px; height: 160px;">
-            <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">{{event.name}}
-            </p>
+          <div class="{{event.type}}-event" style=" background: linear-gradient(-90deg,#254164,#325B87); border-radius: 5px; height: 160px;">
+            <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%">{{event.name}}</p><br>
+            <h5 style="color: white;margin-bottom:200px;text-align: center; white-space: normal;">CodeBus Africa is a 100-day adventure into creative technology and youth empowerment.</h5>
           </div>
         </ion-slide-page>
         <div class="spacer" style="height: 10px;"></div>
