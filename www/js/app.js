@@ -31,7 +31,7 @@ angular.module('jsconfuy', [
       var notificationOpenedCallback = function (jsonData) {
         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
       };
-      android =$ionicPlatform.is("android")
+      android = $ionicPlatform.is("android")
       console.log(android)
       if (android) {
         window.plugins.OneSignal
@@ -79,14 +79,16 @@ angular.module('jsconfuy', [
         controller: 'LoginCtrl'
 
       })
-
-        .state('app.editevent', {
+      .state('app.editevent', {
         url: "/editevent",
-        //cache:false,
-        templateUrl: "templates/editevent.html",
-        controller: 'EditCtrl'
-
+        views: {
+          'menuContent': {
+            templateUrl: "templates/editevent.html",
+            controller: 'EditCtrl'
+          }
+        }
       })
+
 
 
       .state('eventsel', {

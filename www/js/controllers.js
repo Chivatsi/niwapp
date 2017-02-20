@@ -698,4 +698,132 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
 
   }])
+  .controller("EditCtrl",["$scope", "$localStorage", "$stateParams", "$state", "events", "$ionicLoading", "$ionicPopup", "Account", function (scope, storage, params, state, events, loader, popup, account){
+    console.log("loaded")
+    var user = params.user
+    scope.events = []
+    scope.myevents = []
+    console.log(user)
+    function showloader(message) {
+      // message = "Loading..."
+      loader.show({
+        template: message//, duration: 3000
+      })
+    }
+    showloader("Fetching events ...")
+    events.all().then(function (resp) {
+      loader.hide()
+      scope.events = []
+      angular.forEach(resp.data, function (value) {
+        value.selected = false
+        scope.events.push(value)
+      })
+      scope.events = resp.data
+    }, function (error) {
+      loader.hide()
+
+      console.log(error)
+      if (error.data) {
+        showalert(error.statusText, error.data.detail)
+      }
+      else {
+        showalert('No Internet Connection', "Turn on Mobile data or wifi")
+      }
+    })
+    scope.addevents = function (event) {
+      if (event.selected) {
+        //  scope.myevents.push(event.id)
+      }
+      else {
+
+      }
+    }
+
+    showalert = function (title, message) {
+      scope.alertPopup = popup.alert({
+        title: title,
+        template: message,
+        okType: 'button-assertive'
+      });
+
+      scope.alertPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+
+    scope.createschedule = function () {
+      scope.myevents = []
+      angular.forEach(scope.events, function (value) {
+        if (value.selected) {
+          scope.myevents.push(value.id)
+        }
+      })
+      if (scope.myevents == 0) {
+        showalert("No Events Selected", "Select atleast one event")
+      } else {
+        showloader("Creating account and schedule ..")
+        user.events = scope.myevents
+        account.signup(user).then(function () {
+          loader.hide()
+          scope.login(user.username, user.password)
+        }, function (error) {
+          loader.hide()
+          console.log(error)
+          if (error.data) {
+            if (error.status == 401) {
+              showalert("Exists", "User already exists")
+            }
+          }
+          else {
+            showalert('No Internet Connection', "Turn on Mobile data or wifi")
+          }
+        });
+      }
+      console.log(scope.myevents)
+    }
+    scope.login = function (username, password) {
+     // showloader("Signing in ...")
+      // account.login("username=" + username + "&password=" + password)
+      //   .then(function (resp) {
+      //     loader.hide()
+      //     History
+      //     console.log(resp.data)
+      //     storage.auth = resp.data
+      //     getschedule()
+      //   }, function (error) {
+      //     loader.hide()
+      //     // showalert("Error",error.data)
+      //     if (error.data != null) {
+      //       if (error.data.error_description) {
+      //         //if(error.data.error_description=="")
+      //         showalert(error.statusText, error.data.error_description)
+      //       } else {
+      //         showalert(error.statusText, error.data.error.replace("_", " "))
+      //       }
+      //     }
+      //     else {
+      //       // this.eheader = "No Internet Connection"
+      //       showalert("No Internet Connection", "Turn on mobile data or wifi")
+      //     }
+      //     console.log(error)
+      //   });
+    }
+    getschedule = function () {
+      showloader("Finalizing ...")
+      events.userevents().then(function (resp) {
+        loader.hide()
+        console.log(resp)
+        storage.events = resp.data
+        state.go("app.agenda")
+      }, function (error) {
+        loader.hide()
+        if (error.data) {
+          showalert(error.statusText, error.data.detail)
+        }
+
+        console.log(error)
+      })
+    }
+
+  }])
 
