@@ -164,6 +164,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
           d = new Date()
           newd = new Date(event.date) >= d.addDays(-1)
           tday = new Date(event.date == d.addDays(-1))
+
           if (dts.indexOf(event.date) == -1 && newd) {
             dts.push(event.date)
             // alert("New Date "+String(event.date))
@@ -173,6 +174,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
           }
           event.start = new Date(event.date + " " + event.start)
           event.end = new Date(event.date + " " + event.end)
+          //    console.log(event.start,newdate(event.start))
           mevents.push(event)
           // console.log(newdate(event.start))
         }
@@ -203,13 +205,14 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
         }
         plat.ready(function () {
-         localnotification.clearAll();
+             localnotification.clearAll();
           // alert("readr ",mevents[0].date)
           for (var i = 0; i < mevents.length; i++) {
             var event = angular.copy(mevents[i])
-            var time = event.start
-             time = time.setSeconds(time.getSeconds() - 60 * 5)
-            if (newdate(time)) {
+            var time = angular.copy(event.start)
+            time = time.setTime(time.getTime() - 5 * 60000)
+            console.log(new Date(time), time, newdate(time))
+            if ( newdate(time)) {
               localnotification.add({
                 d: event.id,
                 date: time,
@@ -217,8 +220,12 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
                 autoCancel: true,
 
               }).then(function () {
+                //   showtoast("Scheduled "+event.event.name+"","short","bottom")
                 // showalert("Notification set")
               })
+            }
+            else {
+               // showtoast("Event "+event.event.name+" Started","long","bottom")
             }
 
 
