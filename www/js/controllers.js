@@ -939,7 +939,6 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       events.getall().then(function (response) {
         loader.hide()
         console.log(response.data)
-        storage.events = response.data
         storage.not = null
         getEventtimes(response.data)
         storage.program = response.data
