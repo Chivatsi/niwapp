@@ -732,6 +732,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         value.selected = false
         scope.events.push(value)
       })
+      console.log(resp.data)
       scope.events = resp.data
     }, function (error) {
       loader.hide()
