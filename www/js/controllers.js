@@ -359,7 +359,6 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     scope.shareEvent = function (event) {
       var speakersText = "";
       console.log("data")
-
       _.each(event.speakers, function (speaker, index) {
         speakersText += speaker.name;
         if ((index + 1) < event.speakers.length) {
@@ -395,6 +394,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         date.events = filter("filter")(mevents, { "date": dts[i] }, true)
         schedule.push(date)
       }
+      console.log(schedule)
       scope.schedule = schedule
 
     }

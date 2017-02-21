@@ -27,21 +27,21 @@
       <p ng-bind-html="event.topic"></p>
 
     </div>
-      <div ng-repeat="day in schedule">
-        <div class="item item-divider">
-          <div>
-            {{day.date |date:'mediumDate'}}
-            <b><span class="item-note">{{day.date |date:'EEEE'}}<br>UON Towers</span></b> 
-          </div>
+    <div ng-repeat="day in schedule">
+      <div class="item item-divider">
+        <div>
+          {{day.date |date:'mediumDate'}}
+          <b><span class="item-note">{{day.date |date:'EEEE'}}<br>UON Towers</span></b>
         </div>
-          
-        <div ng-repeat="time in event.times" class ="padding">
-         <h6>{{(time.date+'T'+time.start)|date:'shortTime'}} - {{time.date+'T'+time.end|date:'shortTime'}}</h6>
-         <b ng-if="!time.is_break"><h5 style="padding-left: 60%">{{time.topic}}</h5></b>
-         <b ng-if="time.is_break"><h5 style="padding-left: 60%">Break</h5></b>
-        </div>
-        <br>
-        <!--<div class ="padding"> 
+      </div>
+      
+      <div ng-repeat="time in day.events" class="padding">
+        <h6>{{time.start|date:'shortTime'}} - {{time.end|date:'shortTime'}}</h6>
+        <b ng-if="!time.is_break"><h5 style="padding-left: 60%">{{time.topic}}</h5></b>
+        <b ng-if="time.is_break"><h5 style="padding-left: 60%">Break</h5></b>
+      </div>
+      <br>
+      <!--<div class ="padding"> 
          <h6>12.00 PM - 2.00 PM</h6>
          <b><h5 style="padding-left: 60%">Lunch Break</h5></b>
         </div>
@@ -51,7 +51,7 @@
          <h6>2.00 PM - 4.00PM</h6>
          <b><h5 style="padding-left: 60%">Lean Canvas</h5></b><br>
         </div>-->
-      
-      </div>
+
+    </div>
   </ion-content>
 </ion-view>
