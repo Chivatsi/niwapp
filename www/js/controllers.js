@@ -29,6 +29,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       speakers.get().then(function (response) {
         scope.speakers = response.data
         storage.speakers = response.data
+        console.log(storage.speakers)
         loader.hide()
         scope.$broadcast('scroll.refreshComplete')
         showtoast("Speakers Updated :)", 'long', 'bottom')
@@ -319,7 +320,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
     }])
   .controller('EventCtrl', ["$scope", "events", "$stateParams", "$filter", "$ionicLoading", "$ionicPopup", function (scope, events, params, filter, loader, popup) {
     id = params.id
-
+    console.log(id)
     function showloader(message) {
       // message = "Loading..."
       loader.show({
@@ -632,7 +633,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         // console.log('Thank you for not eating my delicious ice cream cone');
       });
     };
-
+    
     scope.createschedule = function () {
       scope.myevents = []
       angular.forEach(scope.events, function (value) {
@@ -644,7 +645,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         showalert("No Events Selected", "Select atleast one event")
       } else {
         showloader("Creating account and schedule ..")
-
+        user.events=scope.myevents
         account.signup(user).then(function () {
           loader.hide()
           scope.login(user.username, user.password)

@@ -28,7 +28,7 @@
               <a href="" ng-click="goToUrl('http://twitter.com/{{speaker.twitter}}')" class="button button-small button-outline button-block">@{{speaker.twitter}}</a>
             </div>
             <div class="col">
-              <a ng-if="speaker.events" ui-sref="app.event({id: speaker.events[0].id})" class="button button-small button-outline button-block">My talk</a>
+              <a ng-if="speaker.events.length !=0" ui-sref="app.event({id: speaker.events[0].id})" class="button button-small button-outline button-block">My talk</a>
             </div>
           </div>
         </div>
