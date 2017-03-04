@@ -114,7 +114,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
       }
 
       plat.ready(function () {
-        android = plat.is("android")
+        android = plat.is("androida")
         if ((storage.devicetoken == undefined || storage.devicetoken == null) && android) {
           //  alert("No Token Saved")
           window.plugins.OneSignal.getIds(function (ids) {
@@ -237,7 +237,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
                   //   showtoast("Event "+event.event.name+" Started","long","bottom")
                 }
               }
-               showtoast("Notifications set","long","bottom")
+              showtoast("Notifications set", "long", "bottom")
 
             }
             // localnotification.getAll().then(function (data) {
@@ -633,7 +633,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         // console.log('Thank you for not eating my delicious ice cream cone');
       });
     };
-    
+
     scope.createschedule = function () {
       scope.myevents = []
       angular.forEach(scope.events, function (value) {
@@ -645,7 +645,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         showalert("No Events Selected", "Select atleast one event")
       } else {
         showloader("Creating account and schedule ..")
-        user.events=scope.myevents
+        user.events = scope.myevents
         account.signup(user).then(function () {
           loader.hide()
           scope.login(user.username, user.password)
@@ -780,7 +780,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         showloader("Updating schedule ..")
         events.editschedule({ "events": scope.myevents }).then(function (resp) {
           loader.hide()
-         getschedule()
+          getschedule()
 
         }, function (error) {
           loader.hide()
@@ -849,6 +849,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
         template: message//, duration: 3000
       })
     }
+
     function showtoast(message, duration, location) {
       toasta.show(message, duration, location).then(function (success) {
         console.log("The toast was shown");
@@ -937,7 +938,7 @@ angular.module('jsconfuy.controllers', ['ngCordova'])
 
 
     scope.getevents = function () {
-      events.getall().then(function (response) {
+      events.mainprogram().then(function (response) {
         loader.hide()
         console.log(response.data)
         storage.not = null

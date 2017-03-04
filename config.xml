@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.niw2017.sisitech101" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.niw2017.sisitech101" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>NIW2017</name>
   <description>
         Nairobi Innovation Week 2017
@@ -85,4 +85,6 @@
   <allow-navigation href="http://192.168.1.130:8100"/>
   <allow-navigation href="http://192.168.1.130:8101"/>
   <allow-navigation href="http://192.168.1.125:8100"/>
+  <allow-navigation href="http://192.168.0.12:8100"/>
+  <allow-navigation href="http://0.0.0.0:8100"/>
 </widget>

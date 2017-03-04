@@ -58,8 +58,8 @@ var serv=angular.module('jsconfuy.services', [])
     };
   });
 
-serv.factory("events",["$http","$localStorage",function(http,storage){
 
+serv.factory("events",["$http","$localStorage",function(http,storage){
   return{
     userevents:function(){
         var token=storage.auth
@@ -79,6 +79,9 @@ serv.factory("events",["$http","$localStorage",function(http,storage){
     },
     getall:function(){
       return http.get(ur+"api/events/all")
+    },
+      mainprogram:function(){
+      return http.get(ur+"api/mainprogram")
     },
     editschedule:function(data){
       var token=""
