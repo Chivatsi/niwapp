@@ -1,0 +1,6 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+        "editor.fontSize": 11,
+    "window.zoomLevel": 0,
+      "terminal.integrated.fontSize": 11
+}

@@ -1,18 +1,27 @@
 <div class="row">
   <div class="col event-time">
-    <span class="time-from">{{event.time_from}}</span>
-    <span ng-show="event.time_to" class="time-to">to {{event.time_to}}</span>
+
+    <span class="time-from">{{event.start |date:'shortTime'}}</span>
+    <span ng-show="event.end" class="time-to">to {{event.end |date:'shortTime'}}</span>
   </div>
-  <a ng-if="event.type !== 'global'" class="col col-75 event-content {{event.type}}" style="background-image:url({{event.background_img}})" ui-sref="app.event({eventId: event.id})">
-    <p class="event-title" ng-bind-html="event.title"></p>
-    <p class="event-speakers" ng-show="{{ event.speakers }}">
-      <span ng-repeat="speaker in event.speakers">{{speaker.name}}{{$last ? '' : ', '}}</span>
+  <a ng-if="!event.is_break" class="col col-75 event-content {{event.event.type}}" style="background-image:url({{event.event.image}})"
+    ui-sref="app.event({id: event.event.id})">
+    <p class="event-title" ng-bind-html="event.event.name"></p>
+    <p class="event-speakers" ng-show="{{event.event.speakers }}">
+      <span ng-repeat="speaker in event.event.speakers">{{speaker.name}}{{$last ? '' : ', '}}</span>
     </p>
-    <p class="event-room" ng-show="event.room">{{event.room}}</p>
-    <div class="event-type-tag {{event.type+'-event'}}">{{event.type}}</div>
-  </a>
-  <div ng-if="event.type === 'global'" class="col col-75 event-content {{event.type}}">
-    <p class="event-title" ng-bind-html="event.title"></p>
-    <p class="event-room">{{event.room}}</p>
-  </div>
+    <p ng-if="event.event.panelists" class="event-speakers" ng-show="{{event.event.speakers }}">
+      <span ng-repeat="speaker in event.event.panelists">{{speaker.name}}{{$last ? '.' : ', '}}</span>
+    </p>
+    <p ng-if="event.event.moderator" class="event-speakers" ng-show="{{event.event.speakers }}">
+      <span>Moderated by {{event.event.moderator.name}}.</span>
+    </p> <br>
+    <p class="event-room" ng-show="event.event.location">{{event.event.location}}</p>
+    <div class="event-type-tag {{event.event.type+'-event'}}">{{event.event.type}} <span style="color:white" class="item-note">{{event.event.status=='INVITE'? 'INVITE ONLY':event.event.status}}</span></div>
+
+    </a>
+    <div ng-if="event.is_break" class="col col-75 event-content global">
+      <p class="event-title">Break</p>
+      <p class="event-room">{{event.topic}}</p>
+    </div>
 </div>

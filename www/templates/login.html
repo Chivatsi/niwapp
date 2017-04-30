@@ -1,0 +1,27 @@
+<ion-view view-title="Login" align-title="left">
+    <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="true" style="background: url(img/nairobi-blurred2.jpg) no-repeat center;background-size:cover;">
+        <form id="login-form1" class="list">
+            <div class="spacer" style="height: 70px;"></div>
+            <img src="img/loginlogo.png" width="65%" style=" display: block; margin: 0 auto;">
+            <div class="spacer" style="height: 60px;"></div>
+            <ion-list id="login-list">
+                <label class="item item-input">
+                <i class="icon ion-person placeholder-icon"></i>
+                <input ng-model="username" placeholder="Username" type="text">
+                </label>
+
+                <div class="spacer" style="height: 10px;"></div>
+                <label class="item item-input">
+                <i class="icon ion-locked placeholder-icon"></i>
+                <input ng-model="password" placeholder="Password" type="password">
+                </label>
+            </ion-list>
+        </form>
+       
+   
+
+        <button id="login-button1" type="submit" ng-click="login(username,password)" ng-disabled="password=='' || username==''" class="button button-assertive  button-block">Log in</button>
+        <a id="login-button2" class="button button-assertive  button-block" href="#/signup">Create Account</a>
+        <a href-inappbrowser="#/signup" id="login-button2" class="button button-light  button-block button-clear">Forgot Password?</a>
+    </ion-content>
+</ion-view>

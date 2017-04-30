@@ -16,7 +16,11 @@
       <ion-list>
         <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.agenda">
           <i class="icon ion-calendar"></i>
-          <h2 class="menu-text">Agenda</h2>
+          <h2 class="menu-text">My Schedule</h2>
+        </ion-item>
+         <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.program">
+          <i class="icon ion-calendar"></i>
+          <h2 class="menu-text">The Program</h2>
         </ion-item>
         <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.speakers">
           <i class="icon ion-speakerphone"></i>
@@ -26,8 +30,12 @@
           <i class="icon ion-ios-location"></i>
           <h2 class="menu-text">Venue</h2>
         </ion-item>
+        <ion-item ng-controller="logoutCtrl" ui-sref="logout({l:'logout'})" class="item item-icon-left" nav-clear menu-close>
+          <i class="icon ion-log-out"></i>
+          <h2  class="menu-text">Logout</h2>
+        </ion-item>
       </ion-list>
-      <h2 class="menu-header-bar-title">JSconf<span class="uy">UY</span></h2>
+      <h2 class="menu-header-bar-title">NIW<span class="uy">2017</span></h2>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
